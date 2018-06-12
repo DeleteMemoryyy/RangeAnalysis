@@ -1,0 +1,53 @@
+# Intellij Idea
+.idea
+*.iml
+*.eml
+
+# Java
+*.class
+*.jar
+
+# Log files
+*.log
+
+# Cache files
+*__pycache__
+
+# ImGui setting
+*imgui.ini
+
+# VS Code
+.vscode/
+
+# Prerequisites
+*.d
+
+# Compiled Object files
+*.slo
+*.lo
+*.o
+*.obj
+
+# Precompiled Headers
+*.gch
+*.pch
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Fortran module files
+*.mod
+*.smod
+
+# Compiled Static libraries
+*.lai
+*.la
+*.a
+*.lib
+
+# Executables
+*.exe
+*.out
+*.app
