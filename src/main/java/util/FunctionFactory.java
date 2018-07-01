@@ -59,7 +59,7 @@ public class FunctionFactory {
         int symbolOrder = Integer.valueOf(matcherFunctionDecleration.group(6));
 
         List<String> argumentList = new ArrayList<>();
-        Map<String, String> variableTable = new HashMap<>();
+        Map<String, String> transTable = new HashMap<>();
 
         // Process arguments
         String defLine = currentTU.getLine(++currentLineNum);
@@ -71,7 +71,7 @@ public class FunctionFactory {
         Matcher matcherArguments = patternVariableDecleration.matcher(argumentsStr);
         while (matcherArguments.find()) {
             argumentList.add(matcherArguments.group(1));
-            variableTable.put(matcherArguments.group(2), matcherArguments.group(1));
+            transTable.put(matcherArguments.group(2), matcherArguments.group(1));
         }
 
         String tmpLine = currentTU.getLine(++currentLineNum);
@@ -95,7 +95,7 @@ public class FunctionFactory {
             Matcher matcherVariableDecleration = patternVariableDecleration.matcher(tmpLine);
             if (matcherVariableDecleration.find() && !
                     matcherVariableDecleration.group(2).startsWith("D.")) {
-                variableTable.put(matcherVariableDecleration.group(2), matcherVariableDecleration.group(1));
+                transTable.put(matcherVariableDecleration.group(2), matcherVariableDecleration.group(1));
             }
 
             varDeclStartLine++;
@@ -105,7 +105,7 @@ public class FunctionFactory {
 
         Function function = new Function(currentTU, funcStartLine, endLineNum, simpleName, defNum, declUid, cgraphUid, symbolOrder);
         function.setArgumentList(argumentList);
-        function.setVariableTable(variableTable);
+        function.setTransTable(transTable);
 
         CFG cfg = CFGFactory.make(function, varDeclStartLine, endLineNum - 1);
         function.setCfg(cfg);

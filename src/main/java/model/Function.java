@@ -14,7 +14,7 @@ public class Function {
     private int symbolOrder;
 
     private List<String> argumentList;
-    private Map<String, String> variableTable;
+    private Map<String, String> transTable;
     private CFG cfg;
 
     public Function(TranslateUnit translateUnit, int startLine, int endLine, String simpleName, int defNum, int declUid, int cGraphUid, int symbolOrder) {
@@ -68,12 +68,12 @@ public class Function {
         this.argumentList = argumentList;
     }
 
-    public Map<String, String> getVariableTable() {
-        return variableTable;
+    public Map<String, String> getTransTable() {
+        return transTable;
     }
 
-    public void setVariableTable(Map<String, String> variableTable) {
-        this.variableTable = variableTable;
+    public void setTransTable(Map<String, String> transTable) {
+        this.transTable = transTable;
     }
 
     public CFG getCfg() {
