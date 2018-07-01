@@ -17,16 +17,15 @@ public class TranslateUnitFactory {
     }
 
 
-    public static TranslateUnit make(String name) {
+    public static TranslateUnit make(String name, File file) {
         if (instance == null)
             instance = new TranslateUnitFactory();
 
-        return instance._make(name);
+        return instance._make(name, file);
     }
 
 
-    private TranslateUnit _make(String name) {
-        File file = new File(name);
+    private TranslateUnit _make(String name, File file) {
         if (!file.exists())
             return null;
 
@@ -39,7 +38,8 @@ public class TranslateUnitFactory {
                     lines.add(line.trim());
             }
 
-            TranslateUnit translateUnit = new TranslateUnit(name, file, lines);
+            TranslateUnit translateUnit = new TranslateUnit(name, file);
+            translateUnit.setLines(lines);
 
             List<Function> functions = new ArrayList<>();
             FunctionFactory functionFactory = FunctionFactory.getFactory();

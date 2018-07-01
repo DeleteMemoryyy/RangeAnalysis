@@ -19,7 +19,7 @@ public class FunctionFactory {
     private int currentEndLine;
 
     Pattern patternFunctionDecleration = Pattern.compile("\\A;; Function ([A-Za-z_][A-Za-z0-9_]*) \\(([A-Za-z_][A-Za-z0-9_]*), funcdef_no=([0-9]*), decl_uid=([0-9]*), cgraph_uid=([0-9]*), symbol_order=([0-9]*)\\)\\Z");
-    Pattern patternFunctionDefnition = Pattern.compile("\\A[A-Za-z_][A-Za-z0-9_]* \\((.*)\\)\\Z");
+    Pattern patternFunctionDefnition = Pattern.compile("\\A[A-Za-z_][A-Za-z0-9_]* \\([A-Za-z0-9_, ]*\\)\\Z");
     Pattern patternVariableDecleration = Pattern.compile("([A-Za-z_][A-Za-z0-9_]*) ([A-Za-z_][A-Za-z0-9_.]*)");
 
     private FunctionFactory() {
@@ -101,16 +101,13 @@ public class FunctionFactory {
             varDeclStartLine++;
         }
 
-        int instStartLine = varDeclStartLine + 1;
-
-
         currentStartLine = endLineNum;
 
         Function function = new Function(currentTU, funcStartLine, endLineNum, simpleName, defNum, declUid, cgraphUid, symbolOrder);
         function.setArgumentList(argumentList);
         function.setVariableTable(variableTable);
 
-        CFG cfg = CFGFactory.make(function, instStartLine, endLineNum);
+        CFG cfg = CFGFactory.make(function, varDeclStartLine, endLineNum - 1);
         function.setCfg(cfg);
 
         return function;

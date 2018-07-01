@@ -13,20 +13,19 @@ public class Function {
     private int cGraphUid;
     private int symbolOrder;
 
-
     private List<String> argumentList;
     private Map<String, String> variableTable;
     private CFG cfg;
 
-    public Function(TranslateUnit _translateUnit, int _startLine, int _endLine, String _simpleName, int _defNum, int _declUid, int _cGraphUid, int _symbolOrder) {
-        translateUnit = _translateUnit;
-        startLine = _startLine;
-        endLine = _endLine;
-        simpleName = _simpleName;
-        defNum = _defNum;
-        declUid = _declUid;
-        cGraphUid = _cGraphUid;
-        symbolOrder = _symbolOrder;
+    public Function(TranslateUnit translateUnit, int startLine, int endLine, String simpleName, int defNum, int declUid, int cGraphUid, int symbolOrder) {
+        this.translateUnit = translateUnit;
+        this.startLine = startLine;
+        this.endLine = endLine;
+        this.simpleName = simpleName;
+        this.defNum = defNum;
+        this.declUid = declUid;
+        this.cGraphUid = cGraphUid;
+        this.symbolOrder = symbolOrder;
     }
 
     public TranslateUnit getTranslateUnit() {
@@ -85,4 +84,23 @@ public class Function {
         this.cfg = cfg;
     }
 
+    public int getArgumentNum() {
+        return argumentList.size();
+    }
+
+    @Override
+    public String toString() {
+        StringBuffer buf = new StringBuffer();
+        buf.append(simpleName);
+        buf.append("(");
+        int argumentNum = getArgumentNum();
+        for (int i = 0; i < argumentNum; ++i) {
+            buf.append(argumentList.get(i));
+            if (i < argumentNum - 1)
+                buf.append(", ");
+        }
+        buf.append(")");
+
+        return buf.toString();
+    }
 }
