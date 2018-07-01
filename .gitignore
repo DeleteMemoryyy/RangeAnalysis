@@ -1,7 +1,5 @@
 # Intellij Idea
 .idea
-*.iml
-*.eml
 
 # Java
 *.class
