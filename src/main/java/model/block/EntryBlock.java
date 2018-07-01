@@ -3,7 +3,7 @@ package model.block;
 import model.CFG;
 
 public class EntryBlock extends BasicBlock {
-    public EntryBlock(String id, CFG cfg) {
-        super(id, cfg);
+    public EntryBlock(CFG cfg) {
+        super("Entry", cfg);
     }
 }

@@ -6,7 +6,6 @@ import model.instructioin.Expression;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class CFG {
 
@@ -17,8 +16,8 @@ public class CFG {
     private List<Expression> instructions;
     private List<BasicBlock> blocks;
     private Map<String, BasicBlock> blockMap;
-    private Map<BasicBlock, Set<BasicBlock>> successors;
-    private Map<BasicBlock, Set<BasicBlock>> precursors;
+    private Map<BasicBlock, List<BasicBlock>> successors;
+    private Map<BasicBlock, List<BasicBlock>> precursors;
 
     public CFG(Function function, int instStartLine, int instEndLine) {
         this.function = function;
@@ -74,40 +73,40 @@ public class CFG {
         this.blockMap = blockMap;
     }
 
-    public Map<BasicBlock, Set<BasicBlock>> getSuccessors() {
+    public Map<BasicBlock, List<BasicBlock>> getSuccessors() {
         return successors;
     }
 
-    public void setSuccessors(Map<BasicBlock, Set<BasicBlock>> successors) {
+    public void setSuccessors(Map<BasicBlock, List<BasicBlock>> successors) {
         this.successors = successors;
     }
 
-    public BasicBlock getFirstBlock() {
+    public BasicBlock getEntryBlock() {
         return blocks.get(0);
     }
 
-    public BasicBlock getLastBlock() {
+    public BasicBlock getExitBlock() {
         return blocks.get(blocks.size() - 1);
     }
 
-    public Map<BasicBlock, Set<BasicBlock>> getPrecursors() {
+    public Map<BasicBlock, List<BasicBlock>> getPrecursors() {
         return precursors;
     }
 
-    public void setPrecursors(Map<BasicBlock, Set<BasicBlock>> precursors) {
+    public void setPrecursors(Map<BasicBlock, List<BasicBlock>> precursors) {
         this.precursors = precursors;
     }
 
-    public Iterator<BasicBlock> getSuccNodes(BasicBlock block) {
-        return successors.get(block).iterator();
+    public List<BasicBlock> getSuccNodes(BasicBlock block) {
+        return successors.get(block);
     }
 
     public int getSuccNodeCount(BasicBlock block) {
         return successors.get(block).size();
     }
 
-    public Iterator<BasicBlock> getPredNodes(BasicBlock block) {
-        return precursors.get(block).iterator();
+    public List<BasicBlock> getPredNodes(BasicBlock block) {
+        return precursors.get(block);
     }
 
     public int getPredNodeCount(BasicBlock block) {

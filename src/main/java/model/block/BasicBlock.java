@@ -1,29 +1,37 @@
 package model.block;
 
 import model.CFG;
+import model.instructioin.Expression;
 
 import java.util.List;
 
 public class BasicBlock {
     private String id;
-    private List<Integer> instructionId;
+    private String name;
+    private List<Expression> instructionList;
     private CFG cfg;
 
     public BasicBlock(String id, CFG cfg) {
         this.id = id;
+        this.name = "<" + id + ">";
         this.cfg = cfg;
     }
 
     public String getId() {
         return id;
+
     }
 
-    public List<Integer> getInstructionId() {
-        return instructionId;
+    public String getName() {
+        return name;
     }
 
-    public void setInstructionId(List<Integer> instructionId) {
-        this.instructionId = instructionId;
+    public List<Expression> getInstructionList() {
+        return instructionList;
+    }
+
+    public void setInstructionIist(List<Expression> instructionList) {
+        this.instructionList = instructionList;
     }
 
     public void setCfg(CFG cfg) {
@@ -34,22 +42,26 @@ public class BasicBlock {
         return cfg;
     }
 
-    public int getFirstinstructionId() {
-        return instructionId.get(0);
+    public Expression getFirstinstruction() {
+        if (instructionList == null)
+            return null;
+        return instructionList.get(0);
     }
 
-    public int getLastInstructionId() {
-        return instructionId.get(instructionId.size() - 1);
+    public Expression getLastInstruction() {
+        if (instructionList == null)
+            return null;
+        return instructionList.get(instructionList.size() - 1);
     }
 
     public int getInstructionCount() {
-        if (instructionId == null)
+        if (instructionList == null)
             return 0;
-        return instructionId.size();
+        return instructionList.size();
     }
 
     @Override
     public String toString() {
-        return id;
+        return name;
     }
 }

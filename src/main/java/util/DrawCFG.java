@@ -13,6 +13,7 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 
 public class DrawCFG {
     private static DrawCFG instance;
@@ -30,14 +31,14 @@ public class DrawCFG {
      */
     protected static String DOT_FILE_PATH = "graph/";
 
-    private static final int MAX_INSTRUCTIONS_PER_BLOCK = 8;
-
     // color style config
     private static final String C_NODE_NORMAL = "black";
     private static final String C_NODE_ENTRY = "orange";
-    private static final String C_NODE_EXIT = "blue";
+    private static final String C_NODE_EXIT = "dodgerblue3";
     private static final String C_NODE_TERMINATED = "blueviolet";
     private static final String C_EDGE_NORMAL = "black";
+    private static final String C_EDGE_TRUE = "crimson";
+    private static final String C_EDGE_FALSE = "teal";
 
     protected CFG cfg;
     protected String formatedName;
@@ -118,18 +119,27 @@ public class DrawCFG {
             return;
         nodeVisited.add(node);
         String curID = getID(node);
-        Iterator<BasicBlock> succIte = cfg.getSuccNodes(node);
 
-        while (succIte.hasNext()) {
-            BasicBlock succNode = succIte.next();
+        List<BasicBlock> succNodes = cfg.getSuccNodes(node);
+        int succCount = succNodes.size();
+        for (int i = 0; i < succCount; ++i) {
+            BasicBlock succNode = succNodes.get(i);
             String succID = getID(succNode);
             if (printEdge) {
                 stream.print("\t\t" + curID + " -> " + succID);
-                stream.print(" [color=" + C_EDGE_NORMAL + "]");
+                if (succCount == 2) {
+                    if (i == 0)
+                        stream.print(" [color=" + C_EDGE_TRUE + "]");
+                    else
+                        stream.print(" [color=" + C_EDGE_FALSE + "]");
+
+                } else
+                    stream.print(" [color=" + C_EDGE_NORMAL + "]");
                 stream.println();
             }
             visitNode(succNode, stream, printEdge);
         }
+
     }
 
     /**
@@ -179,30 +189,15 @@ public class DrawCFG {
     }
 
     protected String getNodeLabel(BasicBlock node) {
-        int instructionCount = node.getInstructionCount();
-        if (instructionCount == 0)
-            return node.getId();
-
-        int printedInstructionsCount = 0;
-        boolean printBar = false;
         StringBuffer buf = new StringBuffer();
-        for (int i = 0; i < instructionCount; i++) {
-            Expression inst = cfg.getInstruction(i);
-            if (inst != null) {
-                if (printedInstructionsCount == MAX_INSTRUCTIONS_PER_BLOCK - 1) {
-                    Expression lastInst = cfg.getInstruction(instructionCount - 1);
-                    if (printBar)
-                        buf.append('|');
-                    buf.append(lastInst);
-                    break;
-                } else {
-                    if (printBar)
-                        buf.append('|');
-                    else
-                        printBar = true;
-                    buf.append(inst);
-                }
-                printedInstructionsCount++;
+        buf.append(node.getName());
+
+        List<Expression> instList = node.getInstructionList();
+        if (instList != null) {
+            Iterator<Expression> instIterator = instList.iterator();
+            while (instIterator.hasNext()) {
+                buf.append('|');
+                buf.append(instIterator.next());
             }
         }
 

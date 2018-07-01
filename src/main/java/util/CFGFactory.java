@@ -4,6 +4,8 @@ import model.CFG;
 import model.Function;
 import model.TranslateUnit;
 import model.block.BasicBlock;
+import model.block.EntryBlock;
+import model.block.ExitBlock;
 import model.instructioin.*;
 
 import java.util.*;
@@ -17,7 +19,7 @@ public class CFGFactory {
     private Pattern patternAssignment = Pattern.compile("\\A([A-Za-z_][A-Za-z0-9_]*) = (.*);\\Z");
     private Pattern patternFuncitonCallInstruction = Pattern.compile("\\A([A-Za-z_][A-Za-z0-9_]*) \\(([A-Za-z0-9_(), ]*)\\);\\Z");
     private Pattern patternPHIExpression = Pattern.compile("\\A# ([A-Za-z_][A-Za-z0-9_]*) = PHI <([A-Za-z_][A-Za-z0-9_]*)(\\(D\\))?\\(([0-9]*)\\), ([A-Za-z_][A-Za-z0-9_]*)(\\(D\\))?\\(([0-9]*)\\)>\\Z");
-    private Pattern patternGotoExpression = Pattern.compile("\\Agoto <(.*)>;\\Z");
+    private Pattern patternGotoExpression = Pattern.compile("\\Agoto <(.*)>( \\(<(.*)>\\))?;\\Z");
     private Pattern patternIfExpression = Pattern.compile("\\Aif \\(([A-Za-z0-9_()>=<! ]*)\\)\\Z");
     private Pattern patternReturnExpression = Pattern.compile("\\Areturn( (.*))?;\\Z");
     private Pattern patternConditionExpression = Pattern.compile("\\A([A-Za-z0-9_().+-]*) (>|>=|==|<|<=|!=) ([A-Za-z0-9_().+-]*)\\Z");
@@ -28,6 +30,7 @@ public class CFGFactory {
     private Pattern patternConstantFloat = Pattern.compile("\\A(-?[0-9]*.[0-9]*)(e([+\\-][0-9]*))?\\Z");
     private Pattern patternFunctionCall = Pattern.compile("\\A([A-Za-z_][A-Za-z0-9_]*) \\(([A-Za-z0-9_().+-, ]*)\\)\\Z");
     private Pattern patternArithmeticExpression = Pattern.compile("\\A([A-Za-z0-9_().+-]*) ([+\\-*/]) ([A-Za-z0-9_().+-]*)\\Z");
+    private Pattern patternConvertExpression = Pattern.compile("\\A\\(([A-Za-z0-9_]*)\\) ([A-Za-z0-9_().+-]*)\\Z");
 
     private CFGFactory() {
     }
@@ -42,9 +45,12 @@ public class CFGFactory {
     private CFG _make(Function function, int instStartLine, int instEndLine) {
         CFG cfg = new CFG(function, instStartLine, instEndLine);
 
-        makeInstructions(cfg);
-        makeBlocks(cfg);
-        makeEdges(cfg);
+        if (!makeInstructions(cfg))
+            return null;
+        if (!makeBlocks(cfg))
+            return null;
+        if (!makeEdges(cfg))
+            return null;
 
         return cfg;
     }
@@ -146,9 +152,14 @@ public class CFGFactory {
 
         List<BasicBlock> blocks = new ArrayList<>();
         Map<String, BasicBlock> blockMap = new HashMap<>();
+
+        EntryBlock entryBlock = new EntryBlock(cfg);
+        blocks.add(entryBlock);
+        blockMap.put(entryBlock.getId(), entryBlock);
+
         BasicBlock currentBlock;
-        List<Integer> instructionId = null;
-        int currentInstructionId = 0;
+        List<Expression> instructionList = null;
+        Iterator<Expression> expressionIterator = instructions.iterator();
         int currentLineNum = instStartLine;
         while (currentLineNum < instEndLine) {
             String tmpLine = translateUnit.getLine(currentLineNum);
@@ -159,19 +170,23 @@ public class CFGFactory {
                 currentBlock = new BasicBlock(id, cfg);
                 blocks.add(currentBlock);
                 blockMap.put(id, currentBlock);
-                instructionId = new ArrayList<>();
-                currentBlock.setInstructionId(instructionId);
+                instructionList = new ArrayList<>();
+                currentBlock.setInstructionIist(instructionList);
                 currentLineNum++;
                 continue;
             }
 
-            Expression instruction = instructions.get(currentInstructionId);
-            instructionId.add(currentInstructionId++);
+            Expression instruction = expressionIterator.next();
+            instructionList.add(instruction);
 
             if (instruction instanceof IfGotoExpression)
                 currentLineNum += 4;
             else currentLineNum++;
         }
+
+        ExitBlock exitBlock = new ExitBlock(cfg);
+        blocks.add(exitBlock);
+        blockMap.put(exitBlock.getId(), exitBlock);
 
         cfg.setBlocks(blocks);
         cfg.setBlockMap(blockMap);
@@ -184,16 +199,25 @@ public class CFGFactory {
 
         List<BasicBlock> blocks = cfg.getBlocks();
         Map<String, BasicBlock> blockMap = cfg.getBlockMap();
-        Map<BasicBlock, Set<BasicBlock>> successors = new HashMap<>();
-        Map<BasicBlock, Set<BasicBlock>> precursors = new HashMap<>();
+        if (blocks == null || blockMap == null)
+            return false;
+
+        Map<BasicBlock, List<BasicBlock>> successors = new HashMap<>();
+        Map<BasicBlock, List<BasicBlock>> precursors = new HashMap<>();
+
+
+        for (BasicBlock block : blocks) {
+            successors.put(block, new ArrayList<>());
+            precursors.put(block, new ArrayList<>());
+        }
+
+        successors.get(cfg.getEntryBlock()).add(blocks.get(1));
 
         int blockNum = blocks.size();
-        for (int i = 0; i < blockNum; ++i) {
+        for (int i = 1; i < blockNum - 1; ++i) {
             BasicBlock currentBlock = blocks.get(i);
-            Set<BasicBlock> successor = new HashSet<>();
-            successors.put(currentBlock, successor);
-
-            Expression lastInstruction = cfg.getInstruction(currentBlock.getLastInstructionId());
+            List<BasicBlock> successor = successors.get(currentBlock);
+            Expression lastInstruction = currentBlock.getLastInstruction();
             if (lastInstruction instanceof GotoExpression) {
                 GotoExpression gotoExpression = (GotoExpression) lastInstruction;
                 successor.add(blockMap.get(gotoExpression.getGotoBlockId()));
@@ -201,16 +225,14 @@ public class CFGFactory {
                 IfGotoExpression ifGotoExpression = (IfGotoExpression) lastInstruction;
                 successor.add(blockMap.get(ifGotoExpression.getTrueGotoBlockId()));
                 successor.add(blockMap.get(ifGotoExpression.getFalseGotoBlockId()));
-            } else if (i < blockNum - 1) {
+            } else {
                 successor.add(blocks.get(i + 1));
             }
         }
         cfg.setSuccessors(successors);
 
-        for (BasicBlock predBlock : blocks)
-            precursors.put(predBlock, new HashSet<>());
         for (BasicBlock predBlock : blocks) {
-            Iterator<BasicBlock> succNodesIterator = cfg.getSuccNodes(predBlock);
+            Iterator<BasicBlock> succNodesIterator = cfg.getSuccNodes(predBlock).iterator();
             while (succNodesIterator.hasNext()) {
                 BasicBlock succBlock = succNodesIterator.next();
                 precursors.get(succBlock).add(predBlock);
@@ -247,6 +269,8 @@ public class CFGFactory {
                 singleExpression = resolveFunctionCallExpression(name);
                 if (singleExpression == null) {
                     singleExpression = resolveArithmeticExpression(name);
+                    if (singleExpression == null)
+                        singleExpression = resolveConvertExpression(name);
                 }
             }
         }
@@ -338,6 +362,19 @@ public class CFGFactory {
         return new ArithmeticExpression(name, operation, leftExpr, rightExpr);
     }
 
+    private ConvertExpression resolveConvertExpression(String name) {
+        Matcher matcher = patternConvertExpression.matcher(name);
+        if (!matcher.find())
+            return null;
+
+        String toType = matcher.group(1);
+        SingleExpression singleExpression = resolveSingleExpression(matcher.group(2));
+        if (singleExpression == null)
+            return null;
+
+        return new ConvertExpression(name, toType, singleExpression);
+    }
+
     private PHIExpression resolvePHIExpression(String name) {
         Matcher matcher = patternPHIExpression.matcher(name);
         if (!matcher.find())
@@ -381,7 +418,10 @@ public class CFGFactory {
         if (!matcher.find())
             return null;
 
-        String gotoBlockId = matcher.group(1);
+        String gotoBlockId = matcher.group(3);
+        if (gotoBlockId == null)
+            gotoBlockId = matcher.group(1);
+
         return new GotoExpression(name.substring(0, name.length() - 1), gotoBlockId);
     }
 
