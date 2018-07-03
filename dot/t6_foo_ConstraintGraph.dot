@@ -1,4 +1,5 @@
 digraph t6_foo_ConstraintGraph { 
+	label=t6_foo_ConstraintGraph
 	center=true
 	labelloc=top
 	fontname=Arial

@@ -1,4 +1,5 @@
 digraph t3_foo_CFG { 
+	label=t3_foo_CFG
 	center=true
 	labelloc=top
 	fontname=Arial

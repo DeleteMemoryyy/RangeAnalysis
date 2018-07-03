@@ -36,6 +36,7 @@ public abstract class DrawGraph {
         try {
             stream = new PrintStream(new FileOutputStream(dotFile));
             stream.println("digraph " + formatedName + " { ");
+            stream.println("\tlabel=" + formatedName);
             stream.println("\tcenter=true");
             stream.println("\tlabelloc=top");
             stream.println("\tfontname=Arial");

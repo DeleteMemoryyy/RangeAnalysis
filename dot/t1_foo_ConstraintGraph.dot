@@ -1,4 +1,5 @@
 digraph t1_foo_ConstraintGraph { 
+	label=t1_foo_ConstraintGraph
 	center=true
 	labelloc=top
 	fontname=Arial

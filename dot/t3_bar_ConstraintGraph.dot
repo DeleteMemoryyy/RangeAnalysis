@@ -1,4 +1,5 @@
 digraph t3_bar_ConstraintGraph { 
+	label=t3_bar_ConstraintGraph
 	center=true
 	labelloc=top
 	fontname=Arial
