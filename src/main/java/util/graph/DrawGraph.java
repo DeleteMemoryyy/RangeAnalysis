@@ -18,7 +18,7 @@ public abstract class DrawGraph {
     /**
      * dot file output path, and svg files will be stored in DOT_FILE_PATH/img/
      */
-    protected static String DOT_FILE_PATH = "graph/";
+    protected static String DOT_FILE_PATH = "dot/";
 
     protected String formatedName;
 
@@ -26,10 +26,9 @@ public abstract class DrawGraph {
 
         File dotDir = new File(DOT_FILE_PATH);
         dotDir.mkdirs();
-        String imagePath = DOT_FILE_PATH + "img/";
+        String imagePath = DOT_FILE_PATH + "../img/";
         File imageDir = new File(imagePath);
-        if (!imageDir.exists())
-            imageDir.mkdirs();
+        imageDir.mkdirs();
 
         String dotFile = DOT_FILE_PATH + formatedName + ".dot";
 
