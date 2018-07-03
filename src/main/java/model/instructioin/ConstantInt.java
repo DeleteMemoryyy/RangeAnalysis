@@ -9,8 +9,13 @@ public class ConstantInt extends ConstantExpression {
         intValue = Integer.valueOf(name);
     }
 
-
     public int getIntValue() {
         return intValue;
     }
+
+    @Override
+    public double doubleValue() {
+        return intValue;
+    }
+
 }

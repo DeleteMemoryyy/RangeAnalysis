@@ -49,7 +49,7 @@ public class BasicBlock {
     }
 
     public Expression getLastInstruction() {
-        if (instructionList == null)
+        if (instructionList == null || instructionList.isEmpty())
             return null;
         return instructionList.get(instructionList.size() - 1);
     }

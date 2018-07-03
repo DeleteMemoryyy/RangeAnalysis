@@ -1,6 +1,5 @@
 package util;
 
-import model.CFG;
 import model.Function;
 import model.TranslateUnit;
 
@@ -107,8 +106,10 @@ public class FunctionFactory {
         function.setArgumentList(argumentList);
         function.setTransTable(transTable);
 
-        CFG cfg = CFGFactory.make(function, varDeclStartLine, endLineNum - 1);
-        function.setCfg(cfg);
+        if (!CFGFactory.make(function, varDeclStartLine, endLineNum - 1))
+            return null;
+        if (!ConstraintGraphFactory.make(function))
+            return null;
 
         return function;
     }

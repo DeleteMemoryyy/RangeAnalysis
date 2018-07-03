@@ -16,6 +16,7 @@ public class Function {
     private List<String> argumentList;
     private Map<String, String> transTable;
     private CFG cfg;
+    private ConstraintGraph constraintGraph;
 
     public Function(TranslateUnit translateUnit, int startLine, int endLine, String simpleName, int defNum, int declUid, int cGraphUid, int symbolOrder) {
         this.translateUnit = translateUnit;
@@ -76,12 +77,20 @@ public class Function {
         this.transTable = transTable;
     }
 
-    public CFG getCfg() {
+    public CFG getCFG() {
         return cfg;
     }
 
-    public void setCfg(CFG cfg) {
+    public void setCFG(CFG cfg) {
         this.cfg = cfg;
+    }
+
+    public ConstraintGraph getConstraintGraph() {
+        return constraintGraph;
+    }
+
+    public void setConstraintGraph(ConstraintGraph constraintGraph) {
+        this.constraintGraph = constraintGraph;
     }
 
     public int getArgumentNum() {
@@ -103,4 +112,5 @@ public class Function {
 
         return buf.toString();
     }
+
 }

@@ -32,27 +32,32 @@ public class CFGFactory {
     private Pattern patternArithmeticExpression = Pattern.compile("\\A([A-Za-z0-9_().+-]*) ([+\\-*/]) ([A-Za-z0-9_().+-]*)\\Z");
     private Pattern patternConvertExpression = Pattern.compile("\\A\\(([A-Za-z0-9_]*)\\) ([A-Za-z0-9_().+-]*)\\Z");
 
+    private Map<String, SingleVariable> variableMap;
+
     private CFGFactory() {
     }
 
-    public static CFG make(Function function, int instStartLine, int instEndLine) {
+    public static boolean make(Function function, int instStartLine, int instEndLine) {
         if (instance == null)
             instance = new CFGFactory();
 
         return instance._make(function, instStartLine, instEndLine);
     }
 
-    private CFG _make(Function function, int instStartLine, int instEndLine) {
+    private boolean _make(Function function, int instStartLine, int instEndLine) {
         CFG cfg = new CFG(function, instStartLine, instEndLine);
+        variableMap = new HashMap<>();
 
         if (!makeInstructions(cfg))
-            return null;
+            return false;
         if (!makeBlocks(cfg))
-            return null;
+            return false;
         if (!makeEdges(cfg))
-            return null;
+            return false;
 
-        return cfg;
+        cfg.setVariableMap(variableMap);
+        function.setCFG(cfg);
+        return true;
     }
 
     private boolean makeInstructions(CFG cfg) {
@@ -152,12 +157,14 @@ public class CFGFactory {
 
         List<BasicBlock> blocks = new ArrayList<>();
         Map<String, BasicBlock> blockMap = new HashMap<>();
+        Map<Expression, BasicBlock> fromBlockMap = new HashMap<>();
 
         EntryBlock entryBlock = new EntryBlock(cfg);
+        entryBlock.setInstructionIist(new ArrayList<>());
         blocks.add(entryBlock);
         blockMap.put(entryBlock.getId(), entryBlock);
 
-        BasicBlock currentBlock;
+        BasicBlock currentBlock = null;
         List<Expression> instructionList = null;
         Iterator<Expression> expressionIterator = instructions.iterator();
         int currentLineNum = instStartLine;
@@ -178,6 +185,7 @@ public class CFGFactory {
 
             Expression instruction = expressionIterator.next();
             instructionList.add(instruction);
+            fromBlockMap.put(instruction, currentBlock);
 
             if (instruction instanceof IfGotoExpression)
                 currentLineNum += 4;
@@ -185,11 +193,13 @@ public class CFGFactory {
         }
 
         ExitBlock exitBlock = new ExitBlock(cfg);
+        exitBlock.setInstructionIist(new ArrayList<>());
         blocks.add(exitBlock);
         blockMap.put(exitBlock.getId(), exitBlock);
 
         cfg.setBlocks(blocks);
         cfg.setBlockMap(blockMap);
+        cfg.setFromBlockMap(fromBlockMap);
         return true;
     }
 
@@ -291,7 +301,13 @@ public class CFGFactory {
         else
             version = Integer.valueOf(matcher.group(3));
 
-        return new SingleVariable(oriName, simpleName, version);
+        SingleVariable singleVariable = variableMap.get(oriName);
+        if (singleVariable == null) {
+            singleVariable = new SingleVariable(oriName, simpleName, version);
+            variableMap.put(oriName, singleVariable);
+        }
+
+        return singleVariable;
     }
 
     private ConstantExpression resolveConstantExpression(String name) {
@@ -368,11 +384,11 @@ public class CFGFactory {
             return null;
 
         String toType = matcher.group(1);
-        SingleExpression singleExpression = resolveSingleExpression(matcher.group(2));
-        if (singleExpression == null)
+        SingleVariable singleVariable = resolveSingleVariable(matcher.group(2));
+        if (singleVariable == null)
             return null;
 
-        return new ConvertExpression(name, toType, singleExpression);
+        return new ConvertExpression(name, toType, singleVariable);
     }
 
     private PHIExpression resolvePHIExpression(String name) {
@@ -381,8 +397,8 @@ public class CFGFactory {
             return null;
 
         SingleVariable leftExpr = resolveSingleVariable(matcher.group(1));
-        SingleExpression fromExpr_1 = resolveSingleExpression(matcher.group(2));
-        SingleExpression fromExpr_2 = resolveSingleExpression(matcher.group(5));
+        SingleVariable fromExpr_1 = resolveSingleVariable(matcher.group(2));
+        SingleVariable fromExpr_2 = resolveSingleVariable(matcher.group(5));
         int fromBlockId_1 = Integer.valueOf(matcher.group(4));
         int fromBlockId_2 = Integer.valueOf(matcher.group(7));
         if (fromExpr_1 == null || fromExpr_2 == null)

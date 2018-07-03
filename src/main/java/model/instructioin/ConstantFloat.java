@@ -25,4 +25,8 @@ public class ConstantFloat extends ConstantExpression {
         return floatValue;
     }
 
+    @Override
+    public double doubleValue() {
+        return floatValue;
+    }
 }

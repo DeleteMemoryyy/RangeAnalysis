@@ -1,13 +1,13 @@
 package model.instructioin;
 
-public class PHIExpression  extends Expression{
+public class PHIExpression extends Expression {
     private SingleVariable leftExpr;
-    private SingleExpression fromExpr_1;
-    private  SingleExpression fromExpr_2;
+    private SingleVariable fromExpr_1;
+    private SingleVariable fromExpr_2;
     private String fromBlockId_1;
     private String fromBlockId_2;
 
-    public PHIExpression(String name, SingleVariable leftExpr, SingleExpression fromExpr_1, SingleExpression fromExpr_2,int fromBlockId_1,int fromBlockId_2) {
+    public PHIExpression(String name, SingleVariable leftExpr, SingleVariable fromExpr_1, SingleVariable fromExpr_2, int fromBlockId_1, int fromBlockId_2) {
         super(name);
 
         this.leftExpr = leftExpr;
@@ -21,11 +21,11 @@ public class PHIExpression  extends Expression{
         return leftExpr;
     }
 
-    public SingleExpression getFromExpr_1() {
+    public SingleVariable getFromExpr_1() {
         return fromExpr_1;
     }
 
-    public SingleExpression getFromExpr_2() {
+    public SingleVariable getFromExpr_2() {
         return fromExpr_2;
     }
 

@@ -2,6 +2,7 @@ package model;
 
 import model.block.BasicBlock;
 import model.instructioin.Expression;
+import model.instructioin.SingleVariable;
 
 import java.util.Iterator;
 import java.util.List;
@@ -16,8 +17,10 @@ public class CFG {
     private List<Expression> instructions;
     private List<BasicBlock> blocks;
     private Map<String, BasicBlock> blockMap;
+    private Map<Expression, BasicBlock> fromBlockMap;
     private Map<BasicBlock, List<BasicBlock>> successors;
     private Map<BasicBlock, List<BasicBlock>> precursors;
+    private Map<String, SingleVariable> variableMap;
 
     public CFG(Function function, int instStartLine, int instEndLine) {
         this.function = function;
@@ -77,6 +80,14 @@ public class CFG {
         return successors;
     }
 
+    public Map<Expression, BasicBlock> getFromBlockMap() {
+        return fromBlockMap;
+    }
+
+    public void setFromBlockMap(Map<Expression, BasicBlock> fromBlockMap) {
+        this.fromBlockMap = fromBlockMap;
+    }
+
     public void setSuccessors(Map<BasicBlock, List<BasicBlock>> successors) {
         this.successors = successors;
     }
@@ -95,6 +106,14 @@ public class CFG {
 
     public void setPrecursors(Map<BasicBlock, List<BasicBlock>> precursors) {
         this.precursors = precursors;
+    }
+
+    public Map<String, SingleVariable> getVariableMap() {
+        return variableMap;
+    }
+
+    public void setVariableMap(Map<String, SingleVariable> variableMap) {
+        this.variableMap = variableMap;
     }
 
     public List<BasicBlock> getSuccNodes(BasicBlock block) {

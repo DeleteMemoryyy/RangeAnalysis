@@ -15,6 +15,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -24,6 +25,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -33,6 +35,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -42,6 +45,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -51,6 +55,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -60,6 +65,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -69,6 +75,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -78,6 +85,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -87,6 +95,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 
@@ -96,6 +105,7 @@ public class MainTest extends TestCase {
         TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
 
         translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
 }

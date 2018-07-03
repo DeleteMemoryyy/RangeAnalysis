@@ -1,6 +1,8 @@
 package model;
 
-import util.DrawCFG;
+import util.graph.DrawCFG;
+import util.graph.DrawConstraintGraph;
+import util.math.Interval;
 
 import java.io.File;
 import java.util.List;
@@ -51,8 +53,19 @@ public class TranslateUnit {
 
     public void drawAllCFG() {
         for (Function function : functions) {
-            DrawCFG.print(function.getCfg(), name + "_" + function.getSimpleName());
+            DrawCFG.print(function.getCFG(), name + "_" + function.getSimpleName());
         }
+    }
+
+    public void drawAllConstraintGraph() {
+        for (Function function : functions) {
+            DrawConstraintGraph.print(function.getConstraintGraph(), name + "_" + function.getSimpleName());
+        }
+    }
+
+    public Interval getReturnRange(List<Interval> argumentRange) {
+        // TODO:
+        return null;
     }
 
     @Override
