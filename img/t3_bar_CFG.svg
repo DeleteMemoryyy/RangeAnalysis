@@ -54,8 +54,8 @@
 </g>
 <!-- Node_2&#45;&gt;Node_3 -->
 <g id="edge3" class="edge"><title>Node_2&#45;&gt;Node_3</title>
-<path fill="none" stroke="crimson" d="M86.9973,-164.397C86.6838,-155.806 86.6684,-146.595 86.951,-137.944"/>
-<polygon fill="crimson" stroke="crimson" points="90.4568,-137.905 87.4435,-127.748 83.465,-137.568 90.4568,-137.905"/>
+<path fill="none" stroke="teal" d="M86.9973,-164.397C86.6838,-155.806 86.6684,-146.595 86.951,-137.944"/>
+<polygon fill="teal" stroke="teal" points="90.4568,-137.905 87.4435,-127.748 83.465,-137.568 90.4568,-137.905"/>
 </g>
 <!-- Node_4 -->
 <g id="node5" class="node"><title>Node_4</title>
@@ -66,8 +66,8 @@
 </g>
 <!-- Node_2&#45;&gt;Node_4 -->
 <g id="edge5" class="edge"><title>Node_2&#45;&gt;Node_4</title>
-<path fill="none" stroke="teal" d="M122.156,-164.397C132.402,-151.845 143.731,-137.968 153.134,-126.448"/>
-<polygon fill="teal" stroke="teal" points="155.985,-128.49 159.598,-118.53 150.563,-124.063 155.985,-128.49"/>
+<path fill="none" stroke="crimson" d="M122.156,-164.397C132.402,-151.845 143.731,-137.968 153.134,-126.448"/>
+<polygon fill="crimson" stroke="crimson" points="155.985,-128.49 159.598,-118.53 150.563,-124.063 155.985,-128.49"/>
 </g>
 <!-- Node_3&#45;&gt;Node_2 -->
 <g id="edge4" class="edge"><title>Node_3&#45;&gt;Node_2</title>

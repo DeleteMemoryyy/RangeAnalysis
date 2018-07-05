@@ -8,6 +8,7 @@ import util.math.Interval;
 import java.util.Map;
 
 public class ConditionConstraint extends Constraint {
+    private boolean condition;
     private SingleVariable oriVariable;
     private Interval offsetInterval;
     private SingleVariable ftVariable;
@@ -19,8 +20,20 @@ public class ConditionConstraint extends Constraint {
      */
     private int ftPosition;
 
+    public boolean getCondition() {
+        return condition;
+    }
+
+    public void setCondition(boolean condition) {
+        this.condition = condition;
+    }
+
     public SingleVariable getOriVariable() {
         return this.oriVariable;
+    }
+
+    public void setOriVariable(SingleVariable oriVariable) {
+        this.oriVariable = oriVariable;
     }
 
     public Interval getOffsetInterval() {
@@ -31,12 +44,17 @@ public class ConditionConstraint extends Constraint {
         return ftVariable;
     }
 
+    public void setFtVariable(SingleVariable ftVariable) {
+        this.ftVariable = ftVariable;
+    }
+
     public int getFtPosition() {
         return ftPosition;
     }
 
-    public ConditionConstraint(Expression expression, SingleVariable oriVariable, Interval offsetInterval, SingleVariable ftVariable, int ftPosition) {
+    public ConditionConstraint(Expression expression, boolean condition, SingleVariable oriVariable, Interval offsetInterval, SingleVariable ftVariable, int ftPosition) {
         super(expression);
+        this.condition = condition;
 
         this.oriVariable = oriVariable;
         this.offsetInterval = offsetInterval;
@@ -47,7 +65,7 @@ public class ConditionConstraint extends Constraint {
     @Override
     public Interval forward(Map<SingleVariable, Range> rangeMap) {
         Range oriRange = rangeMap.get(oriVariable);
-        if(oriRange == null)
+        if (oriRange == null)
             return null;
         if (ftPosition == 0)
             return Interval.intersection(oriRange.getInterval(), offsetInterval);
@@ -60,7 +78,7 @@ public class ConditionConstraint extends Constraint {
         else if (ftPosition == 1)
             return Interval.intersection(oriRange.getInterval(), new Interval(offsetInterval.lower, ENumber.plus(offsetInterval.upper, ftRange.getInterval().upper)));
         else if (ftPosition == 2)
-            return Interval.intersection(oriRange.getInterval(),ftRange.getInterval());
+            return Interval.intersection(oriRange.getInterval(), ftRange.getInterval());
         return null;
     }
 

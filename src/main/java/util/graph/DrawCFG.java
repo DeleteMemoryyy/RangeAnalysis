@@ -21,8 +21,8 @@ public class DrawCFG extends DrawGraph {
     private static final String C_NODE_EXIT = "dodgerblue3";
     private static final String C_NODE_TERMINATED = "blueviolet";
     private static final String C_EDGE_NORMAL = "black";
-    private static final String C_EDGE_TRUE = "crimson";
-    private static final String C_EDGE_FALSE = "teal";
+    private static final String C_EDGE_TRUE = "teal";
+    private static final String C_EDGE_FALSE = "crimson";
 
     protected CFG cfg;
     protected int nextID;

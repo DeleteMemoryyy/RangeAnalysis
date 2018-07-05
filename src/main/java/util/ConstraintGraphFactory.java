@@ -15,8 +15,7 @@ public class ConstraintGraphFactory {
     private static ConstraintGraphFactory instance;
 
     private static Map<String, String> transpositionCompare = new HashMap<>();
-    private static Map<String, String> oppsiteCompare = new HashMap<>();
-
+    private static Map<String, String> oppositeCompare = new HashMap<>();
 
     private ConstraintGraphFactory() {
         transpositionCompare.put(">", "<");
@@ -26,12 +25,12 @@ public class ConstraintGraphFactory {
         transpositionCompare.put("<", ">");
         transpositionCompare.put("!=", "!=");
 
-        oppsiteCompare.put(">", "<=");
-        oppsiteCompare.put(">=", "<");
-        oppsiteCompare.put("==", "!=");
-        oppsiteCompare.put("<=", ">");
-        oppsiteCompare.put("<", ">=");
-        oppsiteCompare.put("!=", "==");
+        oppositeCompare.put(">", "<=");
+        oppositeCompare.put(">=", "<");
+        oppositeCompare.put("==", "!=");
+        oppositeCompare.put("<=", ">");
+        oppositeCompare.put("<", ">=");
+        oppositeCompare.put("!=", "==");
     }
 
     public static boolean make(Function function) {
@@ -268,18 +267,15 @@ public class ConstraintGraphFactory {
                         Set<Constraint> newConstraintSet = new HashSet<>();
 
                         SingleVariable newTrueVariable = new SingleVariable(variable.getName() + "_t", variable.getSimpleName(), variable.getVersion());
-                        String op = condition.getCompareOperation();
-                        Set<Constraint> newTrueUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, trueBlockSet, variable, otherExpr, newTrueVariable, op);
+                        Set<Constraint> newTrueUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, trueBlockSet, variable, otherExpr, newTrueVariable, condition.getCompareOperation(), true, false);
 
                         SingleVariable newFalseVariable = new SingleVariable(variable.getName() + "_f", variable.getSimpleName(), variable.getVersion());
-                        op = oppsiteCompare.get(condition.getCompareOperation());
-                        Set<Constraint> newFalseUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, falseBlockSet, variable, otherExpr, newFalseVariable, op);
+                        Set<Constraint> newFalseUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, falseBlockSet, variable, otherExpr, newFalseVariable, condition.getCompareOperation(), false, false);
 
                         useMap.put(oriRange, newConstraintSet);
 
-                        replaceUseSet(oriConstraintSet, variable, fromBlockMap, trueBlockSet, falseBlockSet, newTrueVariable, newTrueUses, newFalseVariable, newFalseUses);
+                        replaceUseSet(oriConstraintSet, variable, fromBlockMap, defMap, useMap, trueBlockSet, falseBlockSet, newTrueVariable, newTrueUses, newFalseVariable, newFalseUses);
                     }
-
                 }
 
                 if (rightExpr instanceof SingleVariable) {
@@ -300,23 +296,20 @@ public class ConstraintGraphFactory {
                             Set<Constraint> newConstraintSet = new HashSet<>();
 
                             SingleVariable newTrueVariable = new SingleVariable(variable.getName() + "_t", variable.getSimpleName(), variable.getVersion());
-                            String op = transpositionCompare.get(condition.getCompareOperation());
-                            Set<Constraint> newTrueUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, trueBlockSet, variable, otherExpr, newTrueVariable, op);
+                            Set<Constraint> newTrueUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, trueBlockSet, variable, otherExpr, newTrueVariable, condition.getCompareOperation(), true, true);
 
                             SingleVariable newFalseVariable = new SingleVariable(variable.getName() + "_f", variable.getSimpleName(), variable.getVersion());
-                            op = oppsiteCompare.get(transpositionCompare.get(condition.getCompareOperation()));
-                            Set<Constraint> newFalseUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, falseBlockSet, variable, otherExpr, newFalseVariable, op);
+                            Set<Constraint> newFalseUses = getConstraints(rangeMap, defMap, useMap, newConstraintSet, ifGotoExpression, falseBlockSet, variable, otherExpr, newFalseVariable, condition.getCompareOperation(), false, true);
 
                             useMap.put(oriRange, newConstraintSet);
 
-                            replaceUseSet(oriConstraintSet, variable, fromBlockMap, trueBlockSet, falseBlockSet, newTrueVariable, newTrueUses, newFalseVariable, newFalseUses);
+                            replaceUseSet(oriConstraintSet, variable, fromBlockMap, defMap, useMap, trueBlockSet, falseBlockSet, newTrueVariable, newTrueUses, newFalseVariable, newFalseUses);
 
                         }
                     }
                 }
             }
         }
-
 
         ConstraintGraph constraintGraph = new ConstraintGraph(function);
         constraintGraph.setDefMap(defMap);
@@ -327,6 +320,8 @@ public class ConstraintGraphFactory {
 
     private boolean isSparatable(Map<BasicBlock, Set<BasicBlock>> dominanceFroniters, Map<BasicBlock, Set<SingleVariable>> blockUses, BasicBlock trueBlock, BasicBlock falseBlock, Set<BasicBlock> trueBlockSet, Set<BasicBlock> falseBlockSet, SingleVariable variable) {
         boolean flag = false;
+        trueBlockSet.clear();
+        falseBlockSet.clear();
 
         // Condition(i) Lt or Lf dominate any use of v
         for (BasicBlock block : blockUses.keySet()) {
@@ -343,7 +338,7 @@ public class ConstraintGraphFactory {
             }
         }
 
-//        condition(ii) there exists a use of v at the dominance frontier of Lt or Lf
+        // condition(ii) there exists a use of v at the dominance frontier of Lt or Lf
 //        Set<BasicBlock> dominator = dominanceFroniters.get(currentBlock);
 //        for (BasicBlock block : dominator) {
 //            if (blockUses.get(block).contains(variable)) {
@@ -354,18 +349,18 @@ public class ConstraintGraphFactory {
         return flag;
     }
 
-    private Set<Constraint> getConstraints(Map<SingleVariable, Range> rangeMap, Map<Constraint, Range> defMap, Map<Range, Set<Constraint>> useMap, Set<Constraint> newOriUses, IfGotoExpression ifGotoExpression, Set<BasicBlock> blockSet, SingleVariable variable, SingleExpression otherExpr, SingleVariable newVariable, String op) {
+    private Set<Constraint> getConstraints(Map<SingleVariable, Range> rangeMap, Map<Constraint, Range> defMap, Map<Range, Set<Constraint>> useMap, Set<Constraint> newOriUses, IfGotoExpression ifGotoExpression, Set<BasicBlock> blockSet, SingleVariable variable, SingleExpression otherExpr, SingleVariable newVariable, String oriOp, boolean condition, boolean changePosition) {
         Set<Constraint> newUses = new HashSet<>();
         if (!blockSet.isEmpty()) {
             Range newRange = new Range(newVariable, new Interval());
             rangeMap.put(newVariable, newRange);
             useMap.put(newRange, newUses);
 
-            ConditionConstraint newConstraint = makeConditionConstraint(ifGotoExpression, op, variable, otherExpr);
-            if (newConstraint != null)
+            ConditionConstraint newConstraint = makeConditionConstraint(ifGotoExpression, oriOp, variable, otherExpr, condition, changePosition);
+            if (newConstraint != null) {
                 newOriUses.add(newConstraint);
-
-            defMap.put(newConstraint, newRange);
+                defMap.put(newConstraint, newRange);
+            }
         }
         return newUses;
     }
@@ -456,7 +451,7 @@ public class ConstraintGraphFactory {
         return blockUses;
     }
 
-    private void replaceUseSet(Set<Constraint> oriConstraintSet, SingleVariable variable, Map<Expression, BasicBlock> fromBlockMap, Set<BasicBlock> trueBlockSet, Set<BasicBlock> falseBlockSet, SingleVariable newTrueVariable, Set<Constraint> newTrueUses, SingleVariable newFalseVariable, Set<Constraint> newFalseUses) {
+    private void replaceUseSet(Set<Constraint> oriConstraintSet, SingleVariable variable, Map<Expression, BasicBlock> fromBlockMap, Map<Constraint, Range> defMap, Map<Range, Set<Constraint>> useMap, Set<BasicBlock> trueBlockSet, Set<BasicBlock> falseBlockSet, SingleVariable newTrueVariable, Set<Constraint> newTrueUses, SingleVariable newFalseVariable, Set<Constraint> newFalseUses) {
         for (Constraint oriConstraint : oriConstraintSet) {
             Expression oriExpr = oriConstraint.getExpression();
             BasicBlock oriBlock = fromBlockMap.get(oriExpr);
@@ -466,17 +461,17 @@ public class ConstraintGraphFactory {
                     continue;
                 }
 
-                if (replaceVariable(oriConstraint, variable, newTrueVariable))
+                if (replaceVariable(defMap, useMap, oriConstraint, variable, newTrueVariable))
                     newTrueUses.add(oriConstraint);
 
             } else if (falseBlockSet.contains(oriBlock)) {
-                if (replaceVariable(oriConstraint, variable, newFalseVariable))
+                if (replaceVariable(defMap, useMap, oriConstraint, variable, newFalseVariable))
                     newFalseUses.add(oriConstraint);
             }
         }
     }
 
-    private boolean replaceVariable(Constraint constraint, SingleVariable oriVariable, SingleVariable newVariable) {
+    private boolean replaceVariable(Map<Constraint, Range> defMap, Map<Range, Set<Constraint>> useMap, Constraint constraint, SingleVariable oriVariable, SingleVariable newVariable) {
         if (constraint instanceof AssignmentVariableConstraint) {
             AssignmentVariableConstraint variableConstraint = (AssignmentVariableConstraint) constraint;
             SingleVariable contraintVariable = variableConstraint.getSingleVariable();
@@ -489,10 +484,13 @@ public class ConstraintGraphFactory {
         } else if (constraint instanceof AssignmentFunctionCallConstraint) {
             List<SingleExpression> argumentList = ((AssignmentFunctionCallConstraint) constraint).getActualArguments();
             boolean flag = false;
+            Set<SingleExpression> replacedSet = new HashSet<>();
             for (SingleExpression expression : argumentList) {
                 if (expression instanceof SingleVariable && expression == oriVariable) {
                     argumentList.set(argumentList.indexOf(expression), newVariable);
-                    constraint.setName(constraint.getName().replace(oriVariable.getName(), newVariable.getName()));
+                    if (!replacedSet.contains(expression))
+                        constraint.setName(constraint.getName().replace(oriVariable.getName(), newVariable.getName()));
+                    replacedSet.add(expression);
                     flag = true;
                 }
             }
@@ -515,10 +513,11 @@ public class ConstraintGraphFactory {
                 variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
                 flag = true;
             }
-            contraintVariable = variableConstraint.getExpr2();
-            if (contraintVariable == oriVariable) {
+            SingleVariable contraintVariable1 = variableConstraint.getExpr2();
+            if (contraintVariable1 == oriVariable) {
                 variableConstraint.setExpr2(newVariable);
-                variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
+                if (contraintVariable != contraintVariable1)
+                    variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
                 flag = true;
             }
             return flag;
@@ -527,15 +526,55 @@ public class ConstraintGraphFactory {
             SingleVariable contraintVariable = variableConstraint.getFromExpr_1();
             boolean flag = false;
             if (contraintVariable == oriVariable) {
-                variableConstraint.setFromExpr_1(newVariable);
                 variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
                 flag = true;
             }
-            contraintVariable = variableConstraint.getFromExpr_1();
-            if (contraintVariable == oriVariable) {
+            SingleVariable contraintVariable1 = variableConstraint.getFromExpr_2();
+            if (contraintVariable1 == oriVariable) {
                 variableConstraint.setFromExpr_2(newVariable);
+                if (contraintVariable != contraintVariable1)
+                    variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
+                flag = true;
+            }
+            return flag;
+        } else if (constraint instanceof ConditionConstraint) {
+            ConditionConstraint variableConstraint = (ConditionConstraint) constraint;
+            SingleVariable contraintVariable = variableConstraint.getOriVariable();
+            boolean flag = false;
+            if (contraintVariable == oriVariable) {
+                variableConstraint.setOriVariable(newVariable);
                 variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
                 flag = true;
+            }
+            SingleVariable contraintVariable1 = variableConstraint.getFtVariable();
+            if (contraintVariable1 == oriVariable) {
+                variableConstraint.setFtVariable(newVariable);
+                if (contraintVariable != contraintVariable1)
+                    variableConstraint.setName(variableConstraint.getName().replace(oriVariable.getName(), newVariable.getName()));
+                flag = true;
+            }
+            if (flag) {
+                Range nextRange = defMap.get(variableConstraint);
+                if (nextRange == null) {
+                    System.err.println("Error in splitting");
+                    return false;
+                }
+
+                SingleVariable nextVariable = nextRange.getVariable();
+                boolean condition = variableConstraint.getCondition();
+                String newName = newVariable.getName();
+                String oriName = nextVariable.getName();
+                String nextName;
+                if (condition)
+                    nextName = newName + "_t";
+                else
+                    nextName = newName + "_f";
+                nextVariable.setName(nextName);
+
+                Set<Constraint> uses = useMap.get(nextRange);
+                for (Constraint nextUse : uses) {
+                    nextUse.setName(nextUse.getName().replace(oriName, nextName));
+                }
             }
             return flag;
         }
@@ -543,42 +582,51 @@ public class ConstraintGraphFactory {
         return false;
     }
 
-    private ConditionConstraint makeConditionConstraint(IfGotoExpression instruction, String compareOperation, SingleVariable variable, SingleExpression otherExpr) {
+    private ConditionConstraint makeConditionConstraint(IfGotoExpression instruction, String oriOp, SingleVariable variable, SingleExpression otherExpr, boolean condition, boolean changePosition) {
         ConditionConstraint constraint = null;
+
+        String compareOperation = oriOp;
+        if (changePosition)
+            compareOperation = transpositionCompare.get(compareOperation);
+        if (!condition)
+            compareOperation = oppositeCompare.get(compareOperation);
 
         if (otherExpr instanceof ConstantExpression) {
             double value = ((ConstantExpression) otherExpr).doubleValue();
 
             if (compareOperation.equals(">"))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(value + 1.0), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(value + 1.0), new ENumber(1)), null, 0);
             else if (compareOperation.equals(">="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(value), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(value), new ENumber(1)), null, 0);
             else if (compareOperation.equals("=="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(value), new ENumber(value)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(value), new ENumber(value)), null, 0);
             else if (compareOperation.equals("<"))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(-1), new ENumber(value - 1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(value - 1)), null, 0);
             else if (compareOperation.equals("<="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(-1), new ENumber(value)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(value)), null, 0);
             else if (compareOperation.equals("!="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(-1), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(1)), null, 0);
         } else if (otherExpr instanceof SingleVariable) {
             SingleVariable ftVariable = (SingleVariable) otherExpr;
 
             if (compareOperation.equals(">"))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(1.0), new ENumber(1)), ftVariable, -1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(1.0), new ENumber(1)), ftVariable, -1);
             else if (compareOperation.equals(">="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(0.0), new ENumber(1)), ftVariable, -1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(0.0), new ENumber(1)), ftVariable, -1);
             else if (compareOperation.equals("=="))
-                constraint = new ConditionConstraint(instruction, variable, null, ftVariable, 2);
+                constraint = new ConditionConstraint(instruction, condition, variable, null, ftVariable, 2);
             else if (compareOperation.equals("<"))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(-1), new ENumber(-1.0)), ftVariable, 1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(-1.0)), ftVariable, 1);
             else if (compareOperation.equals("<="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(-1), new ENumber(0.0)), ftVariable, 1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(0.0)), ftVariable, 1);
             else if (compareOperation.equals("!="))
-                constraint = new ConditionConstraint(instruction, variable, new Interval(new ENumber(-1), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(1)), null, 0);
         }
         if (constraint != null)
-            constraint.setName("if (" + variable.getName() + " " + compareOperation + " " + otherExpr.getName() + ")");
+            if (!changePosition)
+                constraint.setName("if (" + variable.getName() + " " + compareOperation + " " + otherExpr.getName() + ")");
+            else
+                constraint.setName("if (" + otherExpr.getName() + " " + transpositionCompare.get(compareOperation) + " " + variable.getName() + ")");
 
         return constraint;
     }

@@ -5,6 +5,7 @@ import util.math.ENumber;
 import util.math.Interval;
 
 public class Range extends ConstraintGraphNode {
+
     private final SingleVariable variable;
     private final Interval interval;
 
@@ -13,6 +14,10 @@ public class Range extends ConstraintGraphNode {
 
         this.variable = variable;
         this.interval = interval;
+    }
+
+    public SingleVariable getVariable() {
+        return variable;
     }
 
     public Interval getInterval() {
