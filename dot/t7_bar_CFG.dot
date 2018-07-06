@@ -16,8 +16,8 @@ digraph t7_bar_CFG {
 
 	Node_0 [fillcolor=mintcream, color=orange, shape=Mrecord, style=filled, label="{ \<Entry\> }"]
 	Node_1 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 2\>|if (i_2(D) \>= 0) goto \<bb 3\> else goto \<bb 4\> }"]
-	Node_3 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<L2\>|return _1 }"]
-	Node_5 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 4\>|_4 = 5 - i_2(D)|# _1 = PHI \<_3(3), _4(4)\> }"]
 	Node_4 [fillcolor=mintcream, color=dodgerblue3, shape=Mrecord, style=filled, label="{ \<Exit\> }"]
+	Node_3 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<L2\>|return _1 }"]
 	Node_2 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 3\>|_3 = i_2(D) + 10|goto \<bb 5\> (\<L2\>) }"]
+	Node_5 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 4\>|_4 = 5 - i_2(D)|# _1 = PHI \<_3(3), _4(4)\> }"]
 }

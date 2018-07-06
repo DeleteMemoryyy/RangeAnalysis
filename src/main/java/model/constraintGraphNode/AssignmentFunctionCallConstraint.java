@@ -5,7 +5,6 @@ import model.instructioin.ConstantExpression;
 import model.instructioin.Expression;
 import model.instructioin.SingleExpression;
 import model.instructioin.SingleVariable;
-import util.math.ENumber;
 import util.math.Interval;
 
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class AssignmentFunctionCallConstraint extends Constraint {
         for (SingleExpression expression : actualArguments) {
             if (expression instanceof ConstantExpression) {
                 double value = ((ConstantExpression) expression).doubleValue();
-                argumentRange.add(new Interval(new ENumber(value), new ENumber(value)));
+                argumentRange.add(new Interval(value, value));
             } else if (expression instanceof SingleVariable) {
                 Range range = rangeMap.get(expression);
                 if (range == null)

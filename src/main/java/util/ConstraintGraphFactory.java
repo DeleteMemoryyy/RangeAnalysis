@@ -6,7 +6,6 @@ import model.Function;
 import model.block.BasicBlock;
 import model.constraintGraphNode.*;
 import model.instructioin.*;
-import util.math.ENumber;
 import util.math.Interval;
 
 import java.util.*;
@@ -53,6 +52,9 @@ public class ConstraintGraphFactory {
         Map<SingleVariable, Range> rangeMap = new HashMap<>();
         Map<Constraint, Range> defMap = new HashMap<>();
         Map<Range, Set<Constraint>> useMap = new HashMap<>();
+        Set<ConstraintGraphNode> entryPoints = new HashSet<>();
+
+        ConstraintGraph constraintGraph = new ConstraintGraph(function);
 
         // Convert instructions to constraints and build ConstraintGraph
         for (Expression instruction : instList) {
@@ -71,6 +73,7 @@ public class ConstraintGraphFactory {
                     AssignmentConstantConstraint constraint = new AssignmentConstantConstraint(instruction, expr.doubleValue());
 
                     defMap.put(constraint, dstRange);
+                    // TODO: add init point
                 } else if (srcExpr instanceof SingleVariable) {
                     SingleVariable expr = (SingleVariable) srcExpr;
                     AssignmentVariableConstraint constraint = new AssignmentVariableConstraint(instruction, expr);
@@ -170,6 +173,8 @@ public class ConstraintGraphFactory {
                         AssignmentConstantConstraint constraint = new AssignmentConstantConstraint(instruction, result);
 
                         defMap.put(constraint, dstRange);
+
+                        entryPoints.add(constraint);
                     }
                 } else if (srcExpr instanceof FunctionCall) {
                     FunctionCall functionCall = (FunctionCall) srcExpr;
@@ -220,6 +225,11 @@ public class ConstraintGraphFactory {
                     useMap.put(srcRange2, new HashSet<>());
                 uses = useMap.get(srcRange2);
                 uses.add(constraint);
+            } else if (instruction instanceof ReturnExpression) {
+                ReturnExpression returnExpression = (ReturnExpression) instruction;
+                SingleExpression returnVariable = returnExpression.getRetExpr();
+                if (returnVariable != null && returnVariable instanceof SingleVariable)
+                    constraintGraph.setReturnPoint(rangeMap.get(returnVariable));
             }
         }
 
@@ -311,9 +321,18 @@ public class ConstraintGraphFactory {
             }
         }
 
-        ConstraintGraph constraintGraph = new ConstraintGraph(function);
+        constraintGraph.setRangeMap(rangeMap);
+        constraintGraph.setEntryPoints(entryPoints);
         constraintGraph.setDefMap(defMap);
         constraintGraph.setUseMap(useMap);
+
+        if (!makeRevDefMap(constraintGraph))
+            return false;
+        if (!makeRevUseMap(constraintGraph))
+            return false;
+        if (!makeSCCs(constraintGraph))
+            return false;
+
         function.setConstraintGraph(constraintGraph);
         return true;
     }
@@ -595,32 +614,32 @@ public class ConstraintGraphFactory {
             double value = ((ConstantExpression) otherExpr).doubleValue();
 
             if (compareOperation.equals(">"))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(value + 1.0), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(value + 1.0, Double.POSITIVE_INFINITY), null, 0);
             else if (compareOperation.equals(">="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(value), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(value, Double.POSITIVE_INFINITY), null, 0);
             else if (compareOperation.equals("=="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(value), new ENumber(value)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(value, value), null, 0);
             else if (compareOperation.equals("<"))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(value - 1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, value - 1), null, 0);
             else if (compareOperation.equals("<="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(value)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, value), null, 0);
             else if (compareOperation.equals("!="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY), null, 0);
         } else if (otherExpr instanceof SingleVariable) {
             SingleVariable ftVariable = (SingleVariable) otherExpr;
 
             if (compareOperation.equals(">"))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(1.0), new ENumber(1)), ftVariable, -1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(1.0, Double.POSITIVE_INFINITY), ftVariable, -1);
             else if (compareOperation.equals(">="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(0.0), new ENumber(1)), ftVariable, -1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(0.0, Double.POSITIVE_INFINITY), ftVariable, -1);
             else if (compareOperation.equals("=="))
                 constraint = new ConditionConstraint(instruction, condition, variable, null, ftVariable, 2);
             else if (compareOperation.equals("<"))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(-1.0)), ftVariable, 1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, -1.0), ftVariable, 1);
             else if (compareOperation.equals("<="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(0.0)), ftVariable, 1);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, 0.0), ftVariable, 1);
             else if (compareOperation.equals("!="))
-                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(new ENumber(-1), new ENumber(1)), null, 0);
+                constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY), null, 0);
         }
         if (constraint != null)
             if (!changePosition)
@@ -629,6 +648,129 @@ public class ConstraintGraphFactory {
                 constraint.setName("if (" + otherExpr.getName() + " " + transpositionCompare.get(compareOperation) + " " + variable.getName() + ")");
 
         return constraint;
+    }
+
+    private boolean makeRevDefMap(ConstraintGraph constraintGraph) {
+        if (constraintGraph == null)
+            return false;
+
+        Map<Constraint, Range> defMap = constraintGraph.getDefMap();
+        Set<Constraint> constraintSet = constraintGraph.getConstraintSet();
+        if (defMap == null || constraintSet == null)
+            return false;
+        Map<Range, Constraint> revDefMap = new HashMap<>();
+
+        for (Constraint constraint : constraintSet)
+            revDefMap.put(defMap.get(constraint), constraint);
+
+        constraintGraph.setRevDefMap(revDefMap);
+        return true;
+    }
+
+    private boolean makeRevUseMap(ConstraintGraph constraintGraph) {
+        if (constraintGraph == null)
+            return false;
+
+        Map<Range, Set<Constraint>> useMap = constraintGraph.getUseMap();
+        Set<Range> rangeSet = constraintGraph.getRangeSet();
+        if (useMap == null || rangeSet == null)
+            return false;
+        Map<Constraint, Set<Range>> revUseMap = new HashMap<>();
+
+        for (Range range : rangeSet) {
+            Set<Constraint> uses = useMap.get(range);
+            for (Constraint use : uses) {
+                Set<Range> revUse = revUseMap.get(use);
+                if (revUse == null) {
+                    revUse = new HashSet<>();
+                    revUseMap.put(use, revUse);
+                }
+
+                revUse.add(range);
+            }
+        }
+
+        constraintGraph.setRevUseMap(revUseMap);
+        return true;
+    }
+
+    private boolean makeSCCs(ConstraintGraph constraintGraph) {
+        if (constraintGraph == null)
+            return false;
+
+        Map<Constraint, Range> defMap = constraintGraph.getDefMap();
+        Map<Range, Set<Constraint>> useMap = constraintGraph.getUseMap();
+        Map<Range, Constraint> revDefMap = constraintGraph.getRevDefMap();
+        Map<Constraint, Set<Range>> revUseMap = constraintGraph.getRevUseMap();
+
+        if (defMap == null || useMap == null || revDefMap == null || revUseMap == null)
+            return false;
+        List<Set<ConstraintGraphNode>> SCCs = new ArrayList<>();
+        Set<ConstraintGraphNode> marked = new HashSet<>();
+        LinkedList<ConstraintGraphNode> stack = new LinkedList<>();
+        Map<ConstraintGraphNode, Integer> SCCLabel = new HashMap<>();
+        Set<ConstraintGraphNode> nodeSet = new HashSet<>();
+        nodeSet.addAll(constraintGraph.getConstraintSet());
+        nodeSet.addAll(constraintGraph.getRangeSet());
+
+        for (ConstraintGraphNode node : nodeSet)
+            revDfs(node, revDefMap, revUseMap, marked, stack);
+
+        marked.clear();
+        while (!stack.isEmpty()) {
+            ConstraintGraphNode entry = stack.pop();
+            Set<ConstraintGraphNode> nodes = new HashSet<>();
+            dfs(entry, defMap, useMap, marked, nodes);
+            if (nodes.size() > 1)
+                SCCs.add(nodes);
+        }
+
+        for (int i = 0; i < SCCs.size(); ++i) {
+            for (ConstraintGraphNode node : SCCs.get(i)) {
+                SCCLabel.put(node, i);
+            }
+        }
+
+        constraintGraph.setSCCSetList(SCCs);
+        constraintGraph.setSCCLabel(SCCLabel);
+        return true;
+    }
+
+    private void revDfs(ConstraintGraphNode currentNode, Map<Range, Constraint> revDefMap, Map<Constraint, Set<Range>> revUseMap, Set<ConstraintGraphNode> marked, LinkedList<ConstraintGraphNode> stack) {
+        if (currentNode == null || marked.contains(currentNode))
+            return;
+        marked.add(currentNode);
+
+        if (currentNode instanceof Range) {
+            ConstraintGraphNode nextNode = revDefMap.get(currentNode);
+            revDfs(nextNode, revDefMap, revUseMap, marked, stack);
+        } else {
+            Set<Range> nextNodes = revUseMap.get(currentNode);
+            if (nextNodes != null)
+                for (Range nextNode : nextNodes) {
+                    revDfs(nextNode, revDefMap, revUseMap, marked, stack);
+                }
+        }
+
+        stack.push(currentNode);
+    }
+
+    private void dfs(ConstraintGraphNode currentNode, Map<Constraint, Range> defMap, Map<Range, Set<Constraint>> useMap, Set<ConstraintGraphNode> marked, Set<ConstraintGraphNode> nodes) {
+        if (currentNode == null || marked.contains(currentNode))
+            return;
+        marked.add(currentNode);
+
+        nodes.add(currentNode);
+        if (currentNode instanceof Constraint) {
+            Range nextNode = defMap.get(currentNode);
+            dfs(nextNode, defMap, useMap, marked, nodes);
+        } else {
+            Set<Constraint> nextNodes = useMap.get(currentNode);
+            if (nextNodes != null)
+                for (Constraint nextNode : nextNodes) {
+                    dfs(nextNode, defMap, useMap, marked, nodes);
+                }
+        }
     }
 
 }

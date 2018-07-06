@@ -1,7 +1,6 @@
 package model.constraintGraphNode;
 
 import model.instructioin.SingleVariable;
-import util.math.ENumber;
 import util.math.Interval;
 
 public class Range extends ConstraintGraphNode {
@@ -25,8 +24,8 @@ public class Range extends ConstraintGraphNode {
     }
 
     public void update(Interval i) {
-        interval.lower = new ENumber(i.lower);
-        interval.upper = new ENumber(i.upper);
+        interval.lower = i.lower;
+        interval.upper = i.upper;
     }
 
     @Override

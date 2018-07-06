@@ -2,7 +2,6 @@ package model.constraintGraphNode;
 
 import model.instructioin.Expression;
 import model.instructioin.SingleVariable;
-import util.math.ENumber;
 import util.math.Interval;
 
 import java.util.Map;
@@ -74,9 +73,9 @@ public class ConditionConstraint extends Constraint {
         if (ftRange == null)
             return null;
         if (ftPosition == -1)
-            return Interval.intersection(oriRange.getInterval(), new Interval(ENumber.plus(offsetInterval.lower, ftRange.getInterval().lower), offsetInterval.upper));
+            return Interval.intersection(oriRange.getInterval(), new Interval(offsetInterval.lower + ftRange.getInterval().lower, offsetInterval.upper));
         else if (ftPosition == 1)
-            return Interval.intersection(oriRange.getInterval(), new Interval(offsetInterval.lower, ENumber.plus(offsetInterval.upper, ftRange.getInterval().upper)));
+            return Interval.intersection(oriRange.getInterval(), new Interval(offsetInterval.lower, offsetInterval.upper + ftRange.getInterval().upper));
         else if (ftPosition == 2)
             return Interval.intersection(oriRange.getInterval(), ftRange.getInterval());
         return null;

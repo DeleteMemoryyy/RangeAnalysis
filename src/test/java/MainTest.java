@@ -108,4 +108,14 @@ public class MainTest extends TestCase {
         translateUnit.drawAllConstraintGraph();
         System.out.println(translateUnit);
     }
+
+    public void test11() {
+        String fileName = "t" + 11;
+        File file = new File(benchmarkPath + fileName + ".ssa");
+        TranslateUnit translateUnit = TranslateUnitFactory.make(fileName, file);
+
+        translateUnit.drawAllCFG();
+        translateUnit.drawAllConstraintGraph();
+        System.out.println(translateUnit);
+    }
 }

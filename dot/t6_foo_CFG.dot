@@ -15,11 +15,11 @@ digraph t6_foo_CFG {
 		Node_1 -> Node_6 [color=crimson]
 		Node_6 -> Node_3 [color=black]
 
-	Node_1 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 2\>|i_2 = 8.00000011920928955078125e-1|j_3 = 1.019999980926513671875e+1|sum_4 = 0.0|if (argc_5(D) != 0) goto \<bb 3\> else goto \<bb 4\> }"]
-	Node_3 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 5\>|# sum_1 = PHI \<sum_7(3), sum_9(4)\>|_10 = (int) sum_1 }"]
-	Node_4 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<L3\>|return _10 }"]
 	Node_2 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 3\>|j_6 = 9.19999980926513671875e+0|sum_7 = i_2 + j_6|goto \<bb 5\> }"]
 	Node_0 [fillcolor=mintcream, color=orange, shape=Mrecord, style=filled, label="{ \<Entry\> }"]
 	Node_5 [fillcolor=mintcream, color=dodgerblue3, shape=Mrecord, style=filled, label="{ \<Exit\> }"]
+	Node_1 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 2\>|i_2 = 8.00000011920928955078125e-1|j_3 = 1.019999980926513671875e+1|sum_4 = 0.0|if (argc_5(D) != 0) goto \<bb 3\> else goto \<bb 4\> }"]
 	Node_6 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 4\>|i_8 = 1.2000000476837158203125e+0|sum_9 = i_8 - j_3 }"]
+	Node_3 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<bb 5\>|# sum_1 = PHI \<sum_7(3), sum_9(4)\>|_10 = (int) sum_1 }"]
+	Node_4 [fillcolor=mintcream, color=black, shape=Mrecord, style=filled, label="{ \<L3\>|return _10 }"]
 }

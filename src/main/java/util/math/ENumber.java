@@ -1,7 +1,8 @@
 package util.math;
 
+@Deprecated
 public class ENumber {
-    public double value;
+    public int value;
     /**
      * 0 for normal number
      * 1 for inf
@@ -9,13 +10,8 @@ public class ENumber {
      */
     public int inf;
 
-    public ENumber(double value) {
+    public ENumber(int value, int inf) {
         this.value = value;
-        inf = 0;
-    }
-
-    public ENumber(int inf) {
-        value = 0.0;
         this.inf = inf;
     }
 
@@ -24,14 +20,10 @@ public class ENumber {
         inf = e.inf;
     }
 
-    public boolean isInf() {
-        return inf != 0;
-    }
-
-    public ENumber plus(double d) {
+    public ENumber plus(int d) {
         if (inf != 0)
-            return new ENumber(inf);
-        return new ENumber(value + d);
+            return new ENumber(0, inf);
+        return new ENumber(value + d, 0);
     }
 
     public static ENumber plus(ENumber e1, ENumber e2) {
@@ -41,7 +33,7 @@ public class ENumber {
         if (e1.inf != 0) {
             if (e2.inf != 0) {
                 if (e1.inf == e2.inf)
-                    return new ENumber(e1.inf);
+                    return new ENumber(0, e1.inf);
                 else
                     return null;
             } else {
@@ -55,10 +47,10 @@ public class ENumber {
         return nInfE.plus(e.value);
     }
 
-    public ENumber minus(double d) {
+    public ENumber minus(int d) {
         if (inf != 0)
-            return new ENumber(-inf);
-        return new ENumber(value + d);
+            return new ENumber(0, -inf);
+        return new ENumber(value + d, 0);
     }
 
     public static ENumber minus(ENumber e1, ENumber e2) {
@@ -68,7 +60,7 @@ public class ENumber {
         if (e1.inf != 0) {
             if (e2.inf != 0) {
                 if (e1.inf != e2.inf)
-                    return new ENumber(e1.inf);
+                    return new ENumber(0, e1.inf);
                 else
                     return null;
             } else {
@@ -82,15 +74,15 @@ public class ENumber {
         return nInfE.minus(e.value);
     }
 
-    public ENumber time(double d) {
+    public ENumber time(int d) {
         if (inf != 0) {
             if (d > 0.0)
-                return new ENumber(inf);
+                return new ENumber(0, inf);
             else if (d < 0.0)
-                return new ENumber(-inf);
-            return new ENumber(0.0);
+                return new ENumber(0, -inf);
+            return new ENumber(0, 0);
         }
-        return new ENumber(value * d);
+        return new ENumber(value * d, 0);
     }
 
     public static ENumber time(ENumber e1, ENumber e2) {
@@ -99,7 +91,7 @@ public class ENumber {
 
         if (e1.inf != 0) {
             if (e2.inf != 0)
-                return new ENumber(e1.inf * e2.inf);
+                return new ENumber(0, e1.inf * e2.inf);
             else {
                 nInfE = e2;
                 e = e1;
@@ -111,17 +103,17 @@ public class ENumber {
         return nInfE.time(e.value);
     }
 
-    public ENumber divide(double d) {
+    public ENumber divide(int d) {
         if (d == 0.0)
             return null;
         if (inf != 0) {
             if (d > 0.0)
-                return new ENumber(inf);
+                return new ENumber(0, inf);
             else if (d < 0.0)
-                return new ENumber(-inf);
+                return new ENumber(0, -inf);
             return null;
         }
-        return new ENumber(value / d);
+        return new ENumber(value / d, 0);
     }
 
     public static ENumber divide(ENumber e1, ENumber e2) {
@@ -130,7 +122,7 @@ public class ENumber {
 
         if (e1.inf != 0) {
             if (e2.inf != 0)
-                return new ENumber(e1.inf * e2.inf);
+                return new ENumber(0, e1.inf * e2.inf);
             else {
                 nInfE = e2;
                 e = e1;
@@ -142,7 +134,7 @@ public class ENumber {
         return nInfE.divide(e.value);
     }
 
-    public boolean lt(double d) {
+    public boolean lt(int d) {
         if (inf == 0)
             return value < d;
         else if (inf == -1)
@@ -162,7 +154,7 @@ public class ENumber {
         return e2.lt(e1.value);
     }
 
-    public boolean gt(double d) {
+    public boolean gt(int d) {
         if (inf == 0)
             return value > d;
         else if (inf == -1)
@@ -182,7 +174,7 @@ public class ENumber {
         return e2.gt(e1.value);
     }
 
-    public boolean le(double d) {
+    public boolean le(int d) {
         return !gt(d);
     }
 
@@ -190,7 +182,7 @@ public class ENumber {
         return !gt(e1, e2);
     }
 
-    public boolean ge(double d) {
+    public boolean ge(int d) {
         return !lt(d);
     }
 
@@ -198,7 +190,7 @@ public class ENumber {
         return !lt(e1, e2);
     }
 
-    public boolean equals(double d) {
+    public boolean equals(int d) {
         if (inf == 0)
             return value == d;
         else
