@@ -76,9 +76,9 @@ public class ENumber {
 
     public ENumber time(int d) {
         if (inf != 0) {
-            if (d > 0.0)
+            if (d > 0)
                 return new ENumber(0, inf);
-            else if (d < 0.0)
+            else if (d < 0)
                 return new ENumber(0, -inf);
             return new ENumber(0, 0);
         }
@@ -104,12 +104,12 @@ public class ENumber {
     }
 
     public ENumber divide(int d) {
-        if (d == 0.0)
+        if (d == 0)
             return null;
         if (inf != 0) {
-            if (d > 0.0)
+            if (d > 0)
                 return new ENumber(0, inf);
-            else if (d < 0.0)
+            else if (d < 0)
                 return new ENumber(0, -inf);
             return null;
         }
