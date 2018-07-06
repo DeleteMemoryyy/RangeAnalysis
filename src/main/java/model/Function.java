@@ -104,7 +104,7 @@ public class Function {
         buf.append("(");
         int argumentNum = getArgumentNum();
         for (int i = 0; i < argumentNum; ++i) {
-            buf.append(argumentList.get(i));
+            buf.append(transTable.get(argumentList.get(i)));
             if (i < argumentNum - 1)
                 buf.append(", ");
         }

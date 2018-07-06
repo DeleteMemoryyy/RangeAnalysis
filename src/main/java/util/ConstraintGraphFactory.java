@@ -73,7 +73,8 @@ public class ConstraintGraphFactory {
                     AssignmentConstantConstraint constraint = new AssignmentConstantConstraint(instruction, expr.doubleValue());
 
                     defMap.put(constraint, dstRange);
-                    // TODO: add init point
+
+                    entryPoints.add(constraint);
                 } else if (srcExpr instanceof SingleVariable) {
                     SingleVariable expr = (SingleVariable) srcExpr;
                     AssignmentVariableConstraint constraint = new AssignmentVariableConstraint(instruction, expr);
@@ -173,13 +174,11 @@ public class ConstraintGraphFactory {
                         AssignmentConstantConstraint constraint = new AssignmentConstantConstraint(instruction, result);
 
                         defMap.put(constraint, dstRange);
-
-                        entryPoints.add(constraint);
                     }
                 } else if (srcExpr instanceof FunctionCall) {
                     FunctionCall functionCall = (FunctionCall) srcExpr;
                     List<SingleExpression> arguments = functionCall.getArguments();
-                    AssignmentFunctionCallConstraint constraint = new AssignmentFunctionCallConstraint(instruction, arguments, function.getTranslateUnit());
+                    AssignmentFunctionCallConstraint constraint = new AssignmentFunctionCallConstraint(instruction, functionCall.getSimpleName(), arguments, function.getTranslateUnit());
 
                     defMap.put(constraint, dstRange);
 
@@ -702,9 +701,33 @@ public class ConstraintGraphFactory {
         Map<Range, Set<Constraint>> useMap = constraintGraph.getUseMap();
         Map<Range, Constraint> revDefMap = constraintGraph.getRevDefMap();
         Map<Constraint, Set<Range>> revUseMap = constraintGraph.getRevUseMap();
-
         if (defMap == null || useMap == null || revDefMap == null || revUseMap == null)
             return false;
+
+        List<Range> formalParams = new ArrayList<>();
+        List<String> actualParams = constraintGraph.getFunction().getArgumentList();
+        Set<Range> initialSet = new HashSet<>();
+        for (Range range : constraintGraph.getRangeSet()) {
+            if (!revDefMap.containsKey(range))
+                initialSet.add(range);
+        }
+        for (String name : actualParams) {
+            boolean flag = false;
+            for (Range initialRange : initialSet) {
+                String variableName = initialRange.getVariable().getSimpleName();
+                if (name.equals(variableName)) {
+                    formalParams.add(initialRange);
+                    flag = true;
+                    break;
+                }
+            }
+            if (!flag) {
+                System.err.println("Resolve formal parameters error");
+                return false;
+            }
+        }
+        constraintGraph.setFormalParams(formalParams);
+
         List<Set<ConstraintGraphNode>> SCCs = new ArrayList<>();
         Set<ConstraintGraphNode> marked = new HashSet<>();
         LinkedList<ConstraintGraphNode> stack = new LinkedList<>();
@@ -725,7 +748,8 @@ public class ConstraintGraphFactory {
                 SCCs.add(nodes);
         }
 
-        for (int i = 0; i < SCCs.size(); ++i) {
+        int size = SCCs.size();
+        for (int i = 0; i < size; ++i) {
             for (ConstraintGraphNode node : SCCs.get(i)) {
                 SCCLabel.put(node, i);
             }

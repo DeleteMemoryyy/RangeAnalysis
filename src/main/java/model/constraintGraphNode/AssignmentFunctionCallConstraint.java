@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Map;
 
 public class AssignmentFunctionCallConstraint extends Constraint {
+    private String functionSimpleName;
     private List<SingleExpression> actualArguments;
     private TranslateUnit translateUnit;
 
@@ -31,9 +32,10 @@ public class AssignmentFunctionCallConstraint extends Constraint {
         this.translateUnit = translateUnit;
     }
 
-    public AssignmentFunctionCallConstraint(Expression expression, List<SingleExpression> actualArguments, TranslateUnit translateUnit) {
+    public AssignmentFunctionCallConstraint(Expression expression, String functionSimpleName, List<SingleExpression> actualArguments, TranslateUnit translateUnit) {
         super(expression);
 
+        this.functionSimpleName = functionSimpleName;
         this.actualArguments = actualArguments;
         this.translateUnit = translateUnit;
     }
@@ -54,6 +56,6 @@ public class AssignmentFunctionCallConstraint extends Constraint {
                 return null;
         }
 
-        return translateUnit.getReturnRange(argumentRange);
+        return translateUnit.getReturnRange(functionSimpleName, argumentRange);
     }
 }

@@ -20,4 +20,12 @@ public class FunctionCall extends SingleExpression {
     public void setArguments(List<SingleExpression> arguments) {
         this.arguments = arguments;
     }
+
+    public String getSimpleName() {
+        return simpleName;
+    }
+
+    public void setSimpleName(String simpleName) {
+        this.simpleName = simpleName;
+    }
 }

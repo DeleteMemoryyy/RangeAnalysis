@@ -69,7 +69,7 @@ public class FunctionFactory {
 
         Matcher matcherArguments = patternVariableDecleration.matcher(argumentsStr);
         while (matcherArguments.find()) {
-            argumentList.add(matcherArguments.group(1));
+            argumentList.add(matcherArguments.group(2));
             transTable.put(matcherArguments.group(2), matcherArguments.group(1));
         }
 

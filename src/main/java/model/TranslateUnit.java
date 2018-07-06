@@ -1,5 +1,6 @@
 package model;
 
+import util.ConstraintGraphFactory;
 import util.graph.DrawCFG;
 import util.graph.DrawConstraintGraph;
 import util.math.Interval;
@@ -63,8 +64,16 @@ public class TranslateUnit {
         }
     }
 
-    public Interval getReturnRange(List<Interval> argumentRange) {
-        // TODO:
+    public Interval getReturnRange(String functionName, List<Interval> argumentRange) {
+        for (Function function : functions)
+            if (functionName.equals(function.getSimpleName())) {
+                ConstraintGraph constraintGraph = function.getConstraintGraph();
+                if (constraintGraph == null) {
+                    ConstraintGraphFactory.make(function);
+                    constraintGraph = function.getConstraintGraph();
+                }
+                return constraintGraph.computeReturnRange(argumentRange);
+            }
         return null;
     }
 

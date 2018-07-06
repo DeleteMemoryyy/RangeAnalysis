@@ -4,7 +4,9 @@ import model.constraintGraphNode.Constraint;
 import model.constraintGraphNode.ConstraintGraphNode;
 import model.constraintGraphNode.Range;
 import model.instructioin.SingleVariable;
+import util.math.Interval;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -19,6 +21,7 @@ public class ConstraintGraph {
     private Map<Constraint, Set<Range>> revUseMap;
     private List<Set<ConstraintGraphNode>> SCCSetList;
 
+    private List<Range> formalParams;
     private Map<ConstraintGraphNode, Integer> SCCLabel;
 
     private Range returnPoint;
@@ -126,5 +129,26 @@ public class ConstraintGraph {
 
     public void setSCCLabel(Map<ConstraintGraphNode, Integer> SCCLabel) {
         this.SCCLabel = SCCLabel;
+    }
+
+    public List<Range> getFormalParams() {
+        return formalParams;
+    }
+
+    public void setFormalParams(List<Range> formalParams) {
+        this.formalParams = formalParams;
+    }
+
+    public Interval computeReturnRange(List<Interval> argumentRange) {
+        // TODO: the fucking final problem?
+
+        if(argumentRange.size() != formalParams.size())
+            return null;
+
+        Set<ConstraintGraphNode> currentSet = new HashSet<>();
+        currentSet.addAll(entryPoints);
+
+
+        return null;
     }
 }
