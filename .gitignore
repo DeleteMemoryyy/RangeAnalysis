@@ -49,3 +49,5 @@
 *.exe
 *.out
 *.app
+
+!/RangeAnalysis.jar
