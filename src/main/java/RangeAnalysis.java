@@ -9,7 +9,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class RangeAnalysis {
-    private static Pattern patternInterval = Pattern.compile("\\[([0-9.]*),([0-9.]*)\\]");
+    private static Pattern patternInterval = Pattern.compile("\\[([0-9a-zA-Z.+\\-]*),([0-9a-zA-Z.+\\-]*)\\]");
 
     public static void main(String[] args) {
         int size = args.length;
@@ -36,12 +36,26 @@ public class RangeAnalysis {
             String intervalString = args[i];
             Matcher matcher = patternInterval.matcher(intervalString);
             if (!matcher.find()) {
-                System.out.println("Parameter error: interval format error. Please try to do with [l, u].");
+                System.out.println("Parameter error: interval format error. Please try to do with [l,u].");
                 return;
             } else {
-                Double lower = Double.valueOf(matcher.group(1));
-                Double upper = Double.valueOf(matcher.group(2));
-                if (lower == null || upper == null) {
+                Double lower;
+                if(matcher.group(1).equals("-inf"))
+                    lower = Double.NEGATIVE_INFINITY;
+                else if (matcher.group(1).equals("inf"))
+                    lower = Double.POSITIVE_INFINITY;
+                else
+                    lower = Double.valueOf(matcher.group(1));
+
+                Double upper;
+                if(matcher.group(2).equals("-inf"))
+                    upper = Double.NEGATIVE_INFINITY;
+                else if (matcher.group(2).equals("inf"))
+                    upper = Double.POSITIVE_INFINITY;
+                else
+                    upper = Double.valueOf(matcher.group(2));
+
+                if (upper == null || upper == null) {
                     System.out.println("Parameter error: number format error.");
                     return;
                 }

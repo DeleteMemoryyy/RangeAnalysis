@@ -173,7 +173,7 @@ public class MainTest extends TestCase {
     }
 
     /*
-     * file: t1.c
+     * file: t8.c
      * input: a in [1, 100]
      *        b in [-2, 2]
      * output: ret in [-3.2192308, 5.94230769]
