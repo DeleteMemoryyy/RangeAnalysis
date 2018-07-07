@@ -28,6 +28,11 @@ public class Range extends ConstraintGraphNode {
         interval.upper = i.upper;
     }
 
+    public void update(double lower, double upper) {
+        interval.lower = lower;
+        interval.upper = upper;
+    }
+
     @Override
     public String toString() {
         return variable.getName() + ": " + interval;

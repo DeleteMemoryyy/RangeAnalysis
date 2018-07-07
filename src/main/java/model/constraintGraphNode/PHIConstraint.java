@@ -15,6 +15,10 @@ public class PHIConstraint extends Constraint {
     }
 
     public void setFromExpr_1(SingleVariable fromExpr_1) {
+        if (this.fromExpr_1 != null)
+            readyMap.remove(this.fromExpr_1);
+        readyMap.put(fromExpr_1, false);
+
         this.fromExpr_1 = fromExpr_1;
     }
 
@@ -23,6 +27,10 @@ public class PHIConstraint extends Constraint {
     }
 
     public void setFromExpr_2(SingleVariable fromExpr_2) {
+        if (this.fromExpr_2 != null)
+            readyMap.remove(this.fromExpr_2);
+        readyMap.put(fromExpr_2, false);
+
         this.fromExpr_2 = fromExpr_2;
     }
 
@@ -31,6 +39,9 @@ public class PHIConstraint extends Constraint {
 
         this.fromExpr_1 = fromExpr_1;
         this.fromExpr_2 = fromExpr_2;
+
+        readyMap.put(fromExpr_1, false);
+        readyMap.put(fromExpr_2, false);
     }
 
     @Override

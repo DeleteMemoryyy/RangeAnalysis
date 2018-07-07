@@ -52,7 +52,7 @@ public class ConstraintGraphFactory {
         Map<SingleVariable, Range> rangeMap = new HashMap<>();
         Map<Constraint, Range> defMap = new HashMap<>();
         Map<Range, Set<Constraint>> useMap = new HashMap<>();
-        Set<ConstraintGraphNode> entryPoints = new HashSet<>();
+        Set<Constraint> entryPoints = new HashSet<>();
 
         ConstraintGraph constraintGraph = new ConstraintGraph(function);
 
@@ -249,6 +249,30 @@ public class ConstraintGraphFactory {
                 ConditionExpression condition = ifGotoExpression.getConditionExpression();
                 SingleExpression leftExpr = condition.getLeftExpr();
                 SingleExpression rightExpr = condition.getRightExpr();
+
+                if (leftExpr instanceof SingleVariable) {
+                    SingleVariable variable = (SingleVariable) leftExpr;
+                    Range range = rangeMap.get(variable);
+                    if (range == null) {
+                        range = new Range(variable, new Interval());
+                        rangeMap.put(variable, range);
+                    }
+                    Set<Constraint> uses = useMap.get(range);
+                    if (uses == null)
+                        useMap.put(range, new HashSet<>());
+                }
+                if (rightExpr instanceof SingleVariable) {
+                    SingleVariable variable = (SingleVariable) rightExpr;
+                    Range range = rangeMap.get(variable);
+                    if (range == null) {
+                        range = new Range(variable, new Interval());
+                        rangeMap.put(variable, range);
+                    }
+                    Set<Constraint> uses = useMap.get(range);
+                    if (uses == null)
+                        useMap.put(range, new HashSet<>());
+                }
+
                 String trueBlockId = ifGotoExpression.getTrueGotoBlockId();
                 String falseBlockId = ifGotoExpression.getFalseGotoBlockId();
                 BasicBlock trueBlock = blockMap.get(trueBlockId);
@@ -601,8 +625,8 @@ public class ConstraintGraphFactory {
     }
 
     private ConditionConstraint makeConditionConstraint(IfGotoExpression instruction, String oriOp, SingleVariable variable, SingleExpression otherExpr, boolean condition, boolean changePosition) {
-        ConditionConstraint constraint = null;
 
+        ConditionConstraint constraint = null;
         String compareOperation = oriOp;
         if (changePosition)
             compareOperation = transpositionCompare.get(compareOperation);
@@ -626,7 +650,6 @@ public class ConstraintGraphFactory {
                 constraint = new ConditionConstraint(instruction, condition, variable, new Interval(Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY), null, 0);
         } else if (otherExpr instanceof SingleVariable) {
             SingleVariable ftVariable = (SingleVariable) otherExpr;
-
             if (compareOperation.equals(">"))
                 constraint = new ConditionConstraint(instruction, condition, variable, new Interval(1.0, Double.POSITIVE_INFINITY), ftVariable, -1);
             else if (compareOperation.equals(">="))
@@ -704,35 +727,13 @@ public class ConstraintGraphFactory {
         if (defMap == null || useMap == null || revDefMap == null || revUseMap == null)
             return false;
 
-        List<Range> formalParams = new ArrayList<>();
-        List<String> actualParams = constraintGraph.getFunction().getArgumentList();
-        Set<Range> initialSet = new HashSet<>();
-        for (Range range : constraintGraph.getRangeSet()) {
-            if (!revDefMap.containsKey(range))
-                initialSet.add(range);
-        }
-        for (String name : actualParams) {
-            boolean flag = false;
-            for (Range initialRange : initialSet) {
-                String variableName = initialRange.getVariable().getSimpleName();
-                if (name.equals(variableName)) {
-                    formalParams.add(initialRange);
-                    flag = true;
-                    break;
-                }
-            }
-            if (!flag) {
-                System.err.println("Resolve formal parameters error");
-                return false;
-            }
-        }
-        constraintGraph.setFormalParams(formalParams);
-
         List<Set<ConstraintGraphNode>> SCCs = new ArrayList<>();
+        List<Set<Constraint>> SCCIncomingList = new ArrayList<>();
         Set<ConstraintGraphNode> marked = new HashSet<>();
         LinkedList<ConstraintGraphNode> stack = new LinkedList<>();
         Map<ConstraintGraphNode, Integer> SCCLabel = new HashMap<>();
         Set<ConstraintGraphNode> nodeSet = new HashSet<>();
+        Map<Integer, Boolean> SCCStatus = new HashMap<>();
         nodeSet.addAll(constraintGraph.getConstraintSet());
         nodeSet.addAll(constraintGraph.getRangeSet());
 
@@ -744,8 +745,19 @@ public class ConstraintGraphFactory {
             ConstraintGraphNode entry = stack.pop();
             Set<ConstraintGraphNode> nodes = new HashSet<>();
             dfs(entry, defMap, useMap, marked, nodes);
-            if (nodes.size() > 1)
+            if (nodes.size() > 1) {
                 SCCs.add(nodes);
+                Set<Constraint> IncomingNodes = new HashSet<>();
+                for (ConstraintGraphNode node : nodes) {
+                    if (node instanceof Constraint) {
+                        Set<Range> revUses = revUseMap.get(node);
+                        if (revUses != null && revUses.size() > 1) {
+                            IncomingNodes.add((Constraint) node);
+                        }
+                    }
+                }
+                SCCIncomingList.add(IncomingNodes);
+            }
         }
 
         int size = SCCs.size();
@@ -753,10 +765,13 @@ public class ConstraintGraphFactory {
             for (ConstraintGraphNode node : SCCs.get(i)) {
                 SCCLabel.put(node, i);
             }
+            SCCStatus.put(i, false);
         }
 
         constraintGraph.setSCCSetList(SCCs);
+        constraintGraph.setSCCIncomingList(SCCIncomingList);
         constraintGraph.setSCCLabel(SCCLabel);
+        constraintGraph.setSCCStatus(SCCStatus);
         return true;
     }
 

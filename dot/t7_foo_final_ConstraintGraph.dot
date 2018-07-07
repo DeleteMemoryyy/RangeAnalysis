@@ -1,0 +1,24 @@
+digraph t7_foo_final_ConstraintGraph { 
+	label=t7_foo_final_ConstraintGraph
+	center=true
+	labelloc=top
+	fontname=Arial
+	fontsize=12
+	edge[fontname=Arial, fontsize=10]
+	node[fontname=Arial, fontsize=9]
+
+		Node_0 -> Node_1 [color=steelblue]
+		Node_2 -> Node_3 [color=steelblue]
+		Node_4 -> Node_5 [color=steelblue]
+		Node_3 -> Node_0 [color=tan]
+		Node_6 -> Node_2 [color=tan]
+		Node_1 -> Node_4 [color=tan]
+
+	Node_0 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ k_6 = bar (j_4) }"]
+	Node_2 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ j_4 = bar (i_2(D)) }"]
+	Node_4 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ _7 = k_6 }"]
+	Node_5 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ _7: \[-Infinity, Infinity\] }"]
+	Node_3 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ j_4: \[6.0, 20.0\] }"]
+	Node_6 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ i_2: \[-10.0, 10.0\] }"]
+	Node_1 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_6: \[16.0, 30.0\] }"]
+}

@@ -1,0 +1,34 @@
+digraph t3_foo_final_ConstraintGraph { 
+	label=t3_foo_final_ConstraintGraph
+	center=true
+	labelloc=top
+	fontname=Arial
+	fontsize=12
+	edge[fontname=Arial, fontsize=10]
+	node[fontname=Arial, fontsize=9]
+
+		Node_0 -> Node_1 [color=steelblue]
+		Node_2 -> Node_3 [color=steelblue]
+		Node_4 -> Node_5 [color=steelblue]
+		Node_6 -> Node_7 [color=steelblue]
+		Node_8 -> Node_9 [color=steelblue]
+		Node_5 -> Node_0 [color=tan]
+		Node_5 -> Node_6 [color=tan]
+		Node_1 -> Node_8 [color=tan]
+		Node_7 -> Node_2 [color=tan]
+		Node_3 -> Node_4 [color=tan]
+		Node_11 -> Node_4 [color=tan]
+
+	Node_0 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ if (k_1 \>= N_5) }"]
+	Node_2 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ k_7 = k_1_t + 1 }"]
+	Node_4 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ # k_1 = PHI \<k_3(D)(2), k_7(3)\> }"]
+	Node_6 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ if (k_1 \< N_5) }"]
+	Node_8 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ _8 = k_1_f }"]
+	Node_5 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_1: \[0.0, 50.0\] }"]
+	Node_1 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_1_f: \[20.0, 50.0\] }"]
+	Node_10 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ N_5: \[20.0, 50.0\] }"]
+	Node_9 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ _8: \[-Infinity, Infinity\] }"]
+	Node_7 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_1_t: \[0.0, 49.0\] }"]
+	Node_3 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_7: \[1.0, 50.0\] }"]
+	Node_11 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_3: \[0.0, 10.0\] }"]
+}

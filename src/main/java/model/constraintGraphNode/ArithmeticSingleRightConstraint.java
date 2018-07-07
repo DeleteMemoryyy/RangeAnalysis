@@ -18,7 +18,7 @@ public class ArithmeticSingleRightConstraint extends ArithmeticSingleConstraint 
             return null;
 
         if ("+".equals(operation))
-            return Interval.time(value, range.getInterval());
+            return Interval.plus(value, range.getInterval());
         else if ("-".equals(operation))
             return Interval.minus(value, range.getInterval());
         else if ("*".equals(operation))

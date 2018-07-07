@@ -64,7 +64,7 @@ public class TranslateUnit {
         }
     }
 
-    public Interval getReturnRange(String functionName, List<Interval> argumentRange) {
+    public Interval getReturnRange(String functionName, List<Interval> argumentRange, boolean drawFinalGraph) {
         for (Function function : functions)
             if (functionName.equals(function.getSimpleName())) {
                 ConstraintGraph constraintGraph = function.getConstraintGraph();
@@ -72,7 +72,10 @@ public class TranslateUnit {
                     ConstraintGraphFactory.make(function);
                     constraintGraph = function.getConstraintGraph();
                 }
-                return constraintGraph.computeReturnRange(argumentRange);
+                Interval returnInterval = constraintGraph.computeReturnRange(argumentRange);
+                if (drawFinalGraph)
+                    DrawConstraintGraph.print(function.getConstraintGraph(), name + "_" + function.getSimpleName() + "_final");
+                return returnInterval;
             }
         return null;
     }

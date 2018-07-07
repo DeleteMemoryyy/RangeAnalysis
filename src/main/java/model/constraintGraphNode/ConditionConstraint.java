@@ -32,6 +32,10 @@ public class ConditionConstraint extends Constraint {
     }
 
     public void setOriVariable(SingleVariable oriVariable) {
+        if (this.oriVariable != null)
+            readyMap.remove(this.oriVariable);
+        readyMap.put(oriVariable, false);
+
         this.oriVariable = oriVariable;
     }
 
@@ -40,10 +44,16 @@ public class ConditionConstraint extends Constraint {
     }
 
     public SingleVariable getFtVariable() {
+
         return ftVariable;
     }
 
     public void setFtVariable(SingleVariable ftVariable) {
+//        if (this.ftVariable != null)
+//            readyMap.remove(this.ftVariable);
+//        if (ftVariable != null)
+//            readyMap.put(ftVariable, false);
+
         this.ftVariable = ftVariable;
     }
 
@@ -59,6 +69,10 @@ public class ConditionConstraint extends Constraint {
         this.offsetInterval = offsetInterval;
         this.ftVariable = ftVariable;
         this.ftPosition = ftPosition;
+
+        readyMap.put(oriVariable, false);
+//        if (ftVariable != null)
+//            readyMap.put(ftVariable, false);
     }
 
     @Override

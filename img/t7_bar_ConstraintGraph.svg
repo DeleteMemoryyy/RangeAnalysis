@@ -12,111 +12,111 @@
 <text text-anchor="middle" x="113" y="-482.4" font-family="Arial" font-size="12.00">t7_bar_ConstraintGraph</text>
 <!-- Node_0 -->
 <g id="node1" class="node"><title>Node_0</title>
-<path fill="lightblue" stroke="lightblue" d="M140,-219.5C140,-219.5 206,-219.5 206,-219.5 212,-219.5 218,-225.5 218,-231.5 218,-231.5 218,-243.5 218,-243.5 218,-249.5 212,-255.5 206,-255.5 206,-255.5 140,-255.5 140,-255.5 134,-255.5 128,-249.5 128,-243.5 128,-243.5 128,-231.5 128,-231.5 128,-225.5 134,-219.5 140,-219.5"/>
-<text text-anchor="middle" x="173" y="-235.3" font-family="Arial" font-size="9.00">_3 = i_2_t(D) + 10</text>
+<path fill="lightblue" stroke="lightblue" d="M65,-73.5C65,-73.5 161,-73.5 161,-73.5 167,-73.5 173,-79.5 173,-85.5 173,-85.5 173,-97.5 173,-97.5 173,-103.5 167,-109.5 161,-109.5 161,-109.5 65,-109.5 65,-109.5 59,-109.5 53,-103.5 53,-97.5 53,-97.5 53,-85.5 53,-85.5 53,-79.5 59,-73.5 65,-73.5"/>
+<text text-anchor="middle" x="113" y="-89.3" font-family="Arial" font-size="9.00"># _1 = PHI &lt;_3(3), _4(4)&gt;</text>
 </g>
 <!-- Node_1 -->
 <g id="node2" class="node"><title>Node_1</title>
-<path fill="moccasin" stroke="moccasin" d="M136.5,-146.5C136.5,-146.5 207.5,-146.5 207.5,-146.5 213.5,-146.5 219.5,-152.5 219.5,-158.5 219.5,-158.5 219.5,-170.5 219.5,-170.5 219.5,-176.5 213.5,-182.5 207.5,-182.5 207.5,-182.5 136.5,-182.5 136.5,-182.5 130.5,-182.5 124.5,-176.5 124.5,-170.5 124.5,-170.5 124.5,-158.5 124.5,-158.5 124.5,-152.5 130.5,-146.5 136.5,-146.5"/>
-<text text-anchor="middle" x="172" y="-162.3" font-family="Arial" font-size="9.00">_3: [&#45;Infinity, Infinity]</text>
+<path fill="moccasin" stroke="moccasin" d="M77.5,-0.5C77.5,-0.5 148.5,-0.5 148.5,-0.5 154.5,-0.5 160.5,-6.5 160.5,-12.5 160.5,-12.5 160.5,-24.5 160.5,-24.5 160.5,-30.5 154.5,-36.5 148.5,-36.5 148.5,-36.5 77.5,-36.5 77.5,-36.5 71.5,-36.5 65.5,-30.5 65.5,-24.5 65.5,-24.5 65.5,-12.5 65.5,-12.5 65.5,-6.5 71.5,-0.5 77.5,-0.5"/>
+<text text-anchor="middle" x="113" y="-16.3" font-family="Arial" font-size="9.00">_1: [&#45;Infinity, Infinity]</text>
 </g>
 <!-- Node_0&#45;&gt;Node_1 -->
 <g id="edge1" class="edge"><title>Node_0&#45;&gt;Node_1</title>
-<path fill="none" stroke="steelblue" d="M172.758,-219.313C172.645,-211.289 172.508,-201.547 172.381,-192.569"/>
-<polygon fill="steelblue" stroke="steelblue" points="175.88,-192.479 172.24,-182.529 168.881,-192.577 175.88,-192.479"/>
+<path fill="none" stroke="steelblue" d="M113,-73.3129C113,-65.2895 113,-55.5475 113,-46.5691"/>
+<polygon fill="steelblue" stroke="steelblue" points="116.5,-46.5288 113,-36.5288 109.5,-46.5289 116.5,-46.5288"/>
 </g>
 <!-- Node_2 -->
 <g id="node3" class="node"><title>Node_2</title>
-<path fill="lightblue" stroke="lightblue" d="M66,-73.5C66,-73.5 162,-73.5 162,-73.5 168,-73.5 174,-79.5 174,-85.5 174,-85.5 174,-97.5 174,-97.5 174,-103.5 168,-109.5 162,-109.5 162,-109.5 66,-109.5 66,-109.5 60,-109.5 54,-103.5 54,-97.5 54,-97.5 54,-85.5 54,-85.5 54,-79.5 60,-73.5 66,-73.5"/>
-<text text-anchor="middle" x="114" y="-89.3" font-family="Arial" font-size="9.00"># _1 = PHI &lt;_3(3), _4(4)&gt;</text>
-</g>
-<!-- Node_1&#45;&gt;Node_2 -->
-<g id="edge11" class="edge"><title>Node_1&#45;&gt;Node_2</title>
-<path fill="none" stroke="tan" d="M157.96,-146.313C150.907,-137.679 142.228,-127.055 134.45,-117.534"/>
-<polygon fill="tan" stroke="tan" points="136.948,-115.059 127.911,-109.529 131.527,-119.488 136.948,-115.059"/>
-</g>
-<!-- Node_3 -->
-<g id="node4" class="node"><title>Node_3</title>
-<path fill="moccasin" stroke="moccasin" d="M78.5,-0.5C78.5,-0.5 149.5,-0.5 149.5,-0.5 155.5,-0.5 161.5,-6.5 161.5,-12.5 161.5,-12.5 161.5,-24.5 161.5,-24.5 161.5,-30.5 155.5,-36.5 149.5,-36.5 149.5,-36.5 78.5,-36.5 78.5,-36.5 72.5,-36.5 66.5,-30.5 66.5,-24.5 66.5,-24.5 66.5,-12.5 66.5,-12.5 66.5,-6.5 72.5,-0.5 78.5,-0.5"/>
-<text text-anchor="middle" x="114" y="-16.3" font-family="Arial" font-size="9.00">_1: [&#45;Infinity, Infinity]</text>
-</g>
-<!-- Node_2&#45;&gt;Node_3 -->
-<g id="edge2" class="edge"><title>Node_2&#45;&gt;Node_3</title>
-<path fill="none" stroke="steelblue" d="M114,-73.3129C114,-65.2895 114,-55.5475 114,-46.5691"/>
-<polygon fill="steelblue" stroke="steelblue" points="117.5,-46.5288 114,-36.5288 110.5,-46.5289 117.5,-46.5288"/>
-</g>
-<!-- Node_4 -->
-<g id="node5" class="node"><title>Node_4</title>
-<path fill="lightblue" stroke="lightblue" d="M23.5,-219.5C23.5,-219.5 82.5,-219.5 82.5,-219.5 88.5,-219.5 94.5,-225.5 94.5,-231.5 94.5,-231.5 94.5,-243.5 94.5,-243.5 94.5,-249.5 88.5,-255.5 82.5,-255.5 82.5,-255.5 23.5,-255.5 23.5,-255.5 17.5,-255.5 11.5,-249.5 11.5,-243.5 11.5,-243.5 11.5,-231.5 11.5,-231.5 11.5,-225.5 17.5,-219.5 23.5,-219.5"/>
-<text text-anchor="middle" x="53" y="-235.3" font-family="Arial" font-size="9.00">_4 = 5 &#45; i_2_f(D)</text>
-</g>
-<!-- Node_5 -->
-<g id="node6" class="node"><title>Node_5</title>
-<path fill="moccasin" stroke="moccasin" d="M21.5,-146.5C21.5,-146.5 92.5,-146.5 92.5,-146.5 98.5,-146.5 104.5,-152.5 104.5,-158.5 104.5,-158.5 104.5,-170.5 104.5,-170.5 104.5,-176.5 98.5,-182.5 92.5,-182.5 92.5,-182.5 21.5,-182.5 21.5,-182.5 15.5,-182.5 9.5,-176.5 9.5,-170.5 9.5,-170.5 9.5,-158.5 9.5,-158.5 9.5,-152.5 15.5,-146.5 21.5,-146.5"/>
-<text text-anchor="middle" x="57" y="-162.3" font-family="Arial" font-size="9.00">_4: [&#45;Infinity, Infinity]</text>
-</g>
-<!-- Node_4&#45;&gt;Node_5 -->
-<g id="edge3" class="edge"><title>Node_4&#45;&gt;Node_5</title>
-<path fill="none" stroke="steelblue" d="M53.9683,-219.313C54.4203,-211.289 54.9692,-201.547 55.475,-192.569"/>
-<polygon fill="steelblue" stroke="steelblue" points="58.9725,-192.71 56.0406,-182.529 51.9836,-192.316 58.9725,-192.71"/>
-</g>
-<!-- Node_5&#45;&gt;Node_2 -->
-<g id="edge6" class="edge"><title>Node_5&#45;&gt;Node_2</title>
-<path fill="none" stroke="tan" d="M70.7981,-146.313C77.7295,-137.679 86.2586,-127.055 93.9022,-117.534"/>
-<polygon fill="tan" stroke="tan" points="96.7979,-119.518 100.329,-109.529 91.3393,-115.136 96.7979,-119.518"/>
-</g>
-<!-- Node_6 -->
-<g id="node7" class="node"><title>Node_6</title>
 <path fill="lightblue" stroke="lightblue" d="M57.5,-365.5C57.5,-365.5 90.5,-365.5 90.5,-365.5 96.5,-365.5 102.5,-371.5 102.5,-377.5 102.5,-377.5 102.5,-389.5 102.5,-389.5 102.5,-395.5 96.5,-401.5 90.5,-401.5 90.5,-401.5 57.5,-401.5 57.5,-401.5 51.5,-401.5 45.5,-395.5 45.5,-389.5 45.5,-389.5 45.5,-377.5 45.5,-377.5 45.5,-371.5 51.5,-365.5 57.5,-365.5"/>
 <text text-anchor="middle" x="74" y="-381.3" font-family="Arial" font-size="9.00">if (i_2 &lt; 0)</text>
 </g>
-<!-- Node_7 -->
-<g id="node8" class="node"><title>Node_7</title>
+<!-- Node_3 -->
+<g id="node4" class="node"><title>Node_3</title>
 <path fill="moccasin" stroke="moccasin" d="M12,-292.5C12,-292.5 92,-292.5 92,-292.5 98,-292.5 104,-298.5 104,-304.5 104,-304.5 104,-316.5 104,-316.5 104,-322.5 98,-328.5 92,-328.5 92,-328.5 12,-328.5 12,-328.5 6,-328.5 0,-322.5 0,-316.5 0,-316.5 0,-304.5 0,-304.5 0,-298.5 6,-292.5 12,-292.5"/>
 <text text-anchor="middle" x="52" y="-308.3" font-family="Arial" font-size="9.00">i_2_f: [&#45;Infinity, Infinity]</text>
 </g>
-<!-- Node_6&#45;&gt;Node_7 -->
-<g id="edge4" class="edge"><title>Node_6&#45;&gt;Node_7</title>
+<!-- Node_2&#45;&gt;Node_3 -->
+<g id="edge2" class="edge"><title>Node_2&#45;&gt;Node_3</title>
 <path fill="none" stroke="steelblue" d="M68.6744,-365.313C66.1613,-357.202 63.104,-347.336 60.297,-338.277"/>
 <polygon fill="steelblue" stroke="steelblue" points="63.5796,-337.045 57.2765,-328.529 56.8932,-339.117 63.5796,-337.045"/>
 </g>
-<!-- Node_7&#45;&gt;Node_4 -->
-<g id="edge8" class="edge"><title>Node_7&#45;&gt;Node_4</title>
+<!-- Node_8 -->
+<g id="node9" class="node"><title>Node_8</title>
+<path fill="lightblue" stroke="lightblue" d="M23.5,-219.5C23.5,-219.5 82.5,-219.5 82.5,-219.5 88.5,-219.5 94.5,-225.5 94.5,-231.5 94.5,-231.5 94.5,-243.5 94.5,-243.5 94.5,-249.5 88.5,-255.5 82.5,-255.5 82.5,-255.5 23.5,-255.5 23.5,-255.5 17.5,-255.5 11.5,-249.5 11.5,-243.5 11.5,-243.5 11.5,-231.5 11.5,-231.5 11.5,-225.5 17.5,-219.5 23.5,-219.5"/>
+<text text-anchor="middle" x="53" y="-235.3" font-family="Arial" font-size="9.00">_4 = 5 &#45; i_2_f(D)</text>
+</g>
+<!-- Node_3&#45;&gt;Node_8 -->
+<g id="edge10" class="edge"><title>Node_3&#45;&gt;Node_8</title>
 <path fill="none" stroke="tan" d="M52.2421,-292.313C52.3551,-284.289 52.4923,-274.547 52.6187,-265.569"/>
 <polygon fill="tan" stroke="tan" points="56.1189,-265.577 52.7602,-255.529 49.1196,-265.479 56.1189,-265.577"/>
 </g>
-<!-- Node_8 -->
-<g id="node9" class="node"><title>Node_8</title>
+<!-- Node_4 -->
+<g id="node5" class="node"><title>Node_4</title>
 <path fill="lightblue" stroke="lightblue" d="M144,-365.5C144,-365.5 182,-365.5 182,-365.5 188,-365.5 194,-371.5 194,-377.5 194,-377.5 194,-389.5 194,-389.5 194,-395.5 188,-401.5 182,-401.5 182,-401.5 144,-401.5 144,-401.5 138,-401.5 132,-395.5 132,-389.5 132,-389.5 132,-377.5 132,-377.5 132,-371.5 138,-365.5 144,-365.5"/>
 <text text-anchor="middle" x="163" y="-381.3" font-family="Arial" font-size="9.00">if (i_2 &gt;= 0)</text>
 </g>
-<!-- Node_9 -->
-<g id="node10" class="node"><title>Node_9</title>
+<!-- Node_5 -->
+<g id="node6" class="node"><title>Node_5</title>
 <path fill="moccasin" stroke="moccasin" d="M134,-292.5C134,-292.5 214,-292.5 214,-292.5 220,-292.5 226,-298.5 226,-304.5 226,-304.5 226,-316.5 226,-316.5 226,-322.5 220,-328.5 214,-328.5 214,-328.5 134,-328.5 134,-328.5 128,-328.5 122,-322.5 122,-316.5 122,-316.5 122,-304.5 122,-304.5 122,-298.5 128,-292.5 134,-292.5"/>
 <text text-anchor="middle" x="174" y="-308.3" font-family="Arial" font-size="9.00">i_2_t: [&#45;Infinity, Infinity]</text>
 </g>
-<!-- Node_8&#45;&gt;Node_9 -->
-<g id="edge5" class="edge"><title>Node_8&#45;&gt;Node_9</title>
+<!-- Node_4&#45;&gt;Node_5 -->
+<g id="edge3" class="edge"><title>Node_4&#45;&gt;Node_5</title>
 <path fill="none" stroke="steelblue" d="M165.663,-365.313C166.906,-357.289 168.415,-347.547 169.806,-338.569"/>
 <polygon fill="steelblue" stroke="steelblue" points="173.289,-338.947 171.362,-328.529 166.372,-337.875 173.289,-338.947"/>
 </g>
-<!-- Node_9&#45;&gt;Node_0 -->
-<g id="edge7" class="edge"><title>Node_9&#45;&gt;Node_0</title>
+<!-- Node_6 -->
+<g id="node7" class="node"><title>Node_6</title>
+<path fill="lightblue" stroke="lightblue" d="M140,-219.5C140,-219.5 206,-219.5 206,-219.5 212,-219.5 218,-225.5 218,-231.5 218,-231.5 218,-243.5 218,-243.5 218,-249.5 212,-255.5 206,-255.5 206,-255.5 140,-255.5 140,-255.5 134,-255.5 128,-249.5 128,-243.5 128,-243.5 128,-231.5 128,-231.5 128,-225.5 134,-219.5 140,-219.5"/>
+<text text-anchor="middle" x="173" y="-235.3" font-family="Arial" font-size="9.00">_3 = i_2_t(D) + 10</text>
+</g>
+<!-- Node_5&#45;&gt;Node_6 -->
+<g id="edge9" class="edge"><title>Node_5&#45;&gt;Node_6</title>
 <path fill="none" stroke="tan" d="M173.758,-292.313C173.645,-284.289 173.508,-274.547 173.381,-265.569"/>
 <polygon fill="tan" stroke="tan" points="176.88,-265.479 173.24,-255.529 169.881,-265.577 176.88,-265.479"/>
+</g>
+<!-- Node_7 -->
+<g id="node8" class="node"><title>Node_7</title>
+<path fill="moccasin" stroke="moccasin" d="M136.5,-146.5C136.5,-146.5 207.5,-146.5 207.5,-146.5 213.5,-146.5 219.5,-152.5 219.5,-158.5 219.5,-158.5 219.5,-170.5 219.5,-170.5 219.5,-176.5 213.5,-182.5 207.5,-182.5 207.5,-182.5 136.5,-182.5 136.5,-182.5 130.5,-182.5 124.5,-176.5 124.5,-170.5 124.5,-170.5 124.5,-158.5 124.5,-158.5 124.5,-152.5 130.5,-146.5 136.5,-146.5"/>
+<text text-anchor="middle" x="172" y="-162.3" font-family="Arial" font-size="9.00">_3: [&#45;Infinity, Infinity]</text>
+</g>
+<!-- Node_6&#45;&gt;Node_7 -->
+<g id="edge4" class="edge"><title>Node_6&#45;&gt;Node_7</title>
+<path fill="none" stroke="steelblue" d="M172.758,-219.313C172.645,-211.289 172.508,-201.547 172.381,-192.569"/>
+<polygon fill="steelblue" stroke="steelblue" points="175.88,-192.479 172.24,-182.529 168.881,-192.577 175.88,-192.479"/>
+</g>
+<!-- Node_7&#45;&gt;Node_0 -->
+<g id="edge11" class="edge"><title>Node_7&#45;&gt;Node_0</title>
+<path fill="none" stroke="tan" d="M157.718,-146.313C150.471,-137.592 141.536,-126.84 133.564,-117.246"/>
+<polygon fill="tan" stroke="tan" points="136.234,-114.983 127.151,-109.529 130.85,-119.457 136.234,-114.983"/>
+</g>
+<!-- Node_9 -->
+<g id="node10" class="node"><title>Node_9</title>
+<path fill="moccasin" stroke="moccasin" d="M19.5,-146.5C19.5,-146.5 90.5,-146.5 90.5,-146.5 96.5,-146.5 102.5,-152.5 102.5,-158.5 102.5,-158.5 102.5,-170.5 102.5,-170.5 102.5,-176.5 96.5,-182.5 90.5,-182.5 90.5,-182.5 19.5,-182.5 19.5,-182.5 13.5,-182.5 7.5,-176.5 7.5,-170.5 7.5,-170.5 7.5,-158.5 7.5,-158.5 7.5,-152.5 13.5,-146.5 19.5,-146.5"/>
+<text text-anchor="middle" x="55" y="-162.3" font-family="Arial" font-size="9.00">_4: [&#45;Infinity, Infinity]</text>
+</g>
+<!-- Node_8&#45;&gt;Node_9 -->
+<g id="edge5" class="edge"><title>Node_8&#45;&gt;Node_9</title>
+<path fill="none" stroke="steelblue" d="M53.4841,-219.313C53.7102,-211.289 53.9846,-201.547 54.2375,-192.569"/>
+<polygon fill="steelblue" stroke="steelblue" points="57.7373,-192.623 54.5203,-182.529 50.74,-192.426 57.7373,-192.623"/>
+</g>
+<!-- Node_9&#45;&gt;Node_0 -->
+<g id="edge6" class="edge"><title>Node_9&#45;&gt;Node_0</title>
+<path fill="none" stroke="tan" d="M69.0402,-146.313C76.0932,-137.679 84.7719,-127.055 92.5496,-117.534"/>
+<polygon fill="tan" stroke="tan" points="95.4732,-119.488 99.0891,-109.529 90.0521,-115.059 95.4732,-119.488"/>
 </g>
 <!-- Node_10 -->
 <g id="node11" class="node"><title>Node_10</title>
 <path fill="moccasin" stroke="moccasin" d="M81.5,-438.5C81.5,-438.5 154.5,-438.5 154.5,-438.5 160.5,-438.5 166.5,-444.5 166.5,-450.5 166.5,-450.5 166.5,-462.5 166.5,-462.5 166.5,-468.5 160.5,-474.5 154.5,-474.5 154.5,-474.5 81.5,-474.5 81.5,-474.5 75.5,-474.5 69.5,-468.5 69.5,-462.5 69.5,-462.5 69.5,-450.5 69.5,-450.5 69.5,-444.5 75.5,-438.5 81.5,-438.5"/>
 <text text-anchor="middle" x="118" y="-454.3" font-family="Arial" font-size="9.00">i_2: [&#45;Infinity, Infinity]</text>
 </g>
-<!-- Node_10&#45;&gt;Node_6 -->
-<g id="edge9" class="edge"><title>Node_10&#45;&gt;Node_6</title>
+<!-- Node_10&#45;&gt;Node_2 -->
+<g id="edge7" class="edge"><title>Node_10&#45;&gt;Node_2</title>
 <path fill="none" stroke="tan" d="M107.349,-438.313C102.106,-429.853 95.6799,-419.484 89.8725,-410.112"/>
 <polygon fill="tan" stroke="tan" points="92.7958,-408.185 84.5531,-401.529 86.8458,-411.873 92.7958,-408.185"/>
 </g>
-<!-- Node_10&#45;&gt;Node_8 -->
-<g id="edge10" class="edge"><title>Node_10&#45;&gt;Node_8</title>
+<!-- Node_10&#45;&gt;Node_4 -->
+<g id="edge8" class="edge"><title>Node_10&#45;&gt;Node_4</title>
 <path fill="none" stroke="tan" d="M128.893,-438.313C134.255,-429.853 140.827,-419.484 146.767,-410.112"/>
 <polygon fill="tan" stroke="tan" points="149.81,-411.849 152.207,-401.529 143.897,-408.102 149.81,-411.849"/>
 </g>

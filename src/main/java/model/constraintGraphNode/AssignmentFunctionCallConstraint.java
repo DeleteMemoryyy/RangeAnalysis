@@ -30,6 +30,14 @@ public class AssignmentFunctionCallConstraint extends Constraint {
 
     public void setTranslateUnit(TranslateUnit translateUnit) {
         this.translateUnit = translateUnit;
+
+        readyMap.clear();
+        for (SingleExpression singleExpression : actualArguments) {
+            if (singleExpression instanceof SingleVariable) {
+                SingleVariable variable = (SingleVariable) singleExpression;
+                readyMap.put(variable, false);
+            }
+        }
     }
 
     public AssignmentFunctionCallConstraint(Expression expression, String functionSimpleName, List<SingleExpression> actualArguments, TranslateUnit translateUnit) {
@@ -38,6 +46,13 @@ public class AssignmentFunctionCallConstraint extends Constraint {
         this.functionSimpleName = functionSimpleName;
         this.actualArguments = actualArguments;
         this.translateUnit = translateUnit;
+
+        for (SingleExpression singleExpression : actualArguments) {
+            if (singleExpression instanceof SingleVariable) {
+                SingleVariable variable = (SingleVariable) singleExpression;
+                readyMap.put(variable, false);
+            }
+        }
     }
 
     @Override
@@ -51,11 +66,11 @@ public class AssignmentFunctionCallConstraint extends Constraint {
                 Range range = rangeMap.get(expression);
                 if (range == null)
                     return null;
-                return range.getInterval();
+                argumentRange.add(range.getInterval());
             } else
                 return null;
         }
 
-        return translateUnit.getReturnRange(functionSimpleName, argumentRange);
+        return translateUnit.getReturnRange(functionSimpleName, argumentRange, true);
     }
 }

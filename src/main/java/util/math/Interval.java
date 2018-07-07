@@ -1,5 +1,7 @@
 package util.math;
 
+import java.util.Objects;
+
 public class Interval {
     public double lower;
     public double upper;
@@ -12,6 +14,11 @@ public class Interval {
     public Interval(double lower, double upper) {
         this.lower = lower;
         this.upper = upper;
+    }
+
+    public Interval(Interval interval) {
+        lower = interval.lower;
+        upper = interval.upper;
     }
 
     public static Interval intersection(Interval i1, Interval i2) {
@@ -78,6 +85,33 @@ public class Interval {
 
     public static Interval time(double d, Interval i) {
         return time(i, d);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || this.getClass() != o.getClass()) return false;
+        Interval interval = (Interval) o;
+
+        boolean lowerFlag;
+        if (lower == Double.NEGATIVE_INFINITY || interval.lower == Double.NEGATIVE_INFINITY)
+            lowerFlag = Double.compare(lower, interval.lower) == 0;
+        else
+            lowerFlag = Math.abs(lower - interval.lower) < 0.01;
+
+        boolean upperFlag;
+        if (upper == Double.POSITIVE_INFINITY || interval.upper == Double.POSITIVE_INFINITY)
+            upperFlag = Double.compare(upper, interval.upper) == 0;
+        else
+            upperFlag = Math.abs(upper - interval.upper) < 0.01;
+
+        return lowerFlag && upperFlag;
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(this.lower, this.upper);
     }
 
     public static Interval divide(Interval i1, Interval i2) {

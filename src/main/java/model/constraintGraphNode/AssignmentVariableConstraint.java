@@ -14,6 +14,10 @@ public class AssignmentVariableConstraint extends Constraint {
     }
 
     public void setSingleVariable(SingleVariable singleVariable) {
+        if (this.singleVariable != null)
+            readyMap.remove(this.singleVariable);
+        readyMap.put(singleVariable, false);
+
         this.singleVariable = singleVariable;
     }
 
@@ -21,6 +25,7 @@ public class AssignmentVariableConstraint extends Constraint {
         super(expression);
 
         this.singleVariable = singleVariable;
+        readyMap.put(singleVariable, false);
     }
 
     @Override

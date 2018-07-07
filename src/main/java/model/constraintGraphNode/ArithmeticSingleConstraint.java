@@ -13,6 +13,8 @@ public abstract class ArithmeticSingleConstraint extends ArithmeticConstraint {
 
     public void setSingleVariable(SingleVariable singleVariable) {
         this.singleVariable = singleVariable;
+
+        readyMap.put(singleVariable,false);
     }
 
     public ArithmeticSingleConstraint(Expression expression, String operation, SingleVariable singleVariable, double value) {

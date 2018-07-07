@@ -1,0 +1,36 @@
+digraph t4_foo_final_ConstraintGraph { 
+	label=t4_foo_final_ConstraintGraph
+	center=true
+	labelloc=top
+	fontname=Arial
+	fontsize=12
+	edge[fontname=Arial, fontsize=10]
+	node[fontname=Arial, fontsize=9]
+
+		Node_0 -> Node_1 [color=steelblue]
+		Node_2 -> Node_3 [color=steelblue]
+		Node_4 -> Node_5 [color=steelblue]
+		Node_6 -> Node_7 [color=steelblue]
+		Node_8 -> Node_9 [color=steelblue]
+		Node_10 -> Node_11 [color=steelblue]
+		Node_9 -> Node_6 [color=tan]
+		Node_9 -> Node_10 [color=tan]
+		Node_3 -> Node_8 [color=tan]
+		Node_7 -> Node_4 [color=tan]
+		Node_11 -> Node_2 [color=tan]
+		Node_1 -> Node_8 [color=tan]
+
+	Node_0 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ k_2 = 0 }"]
+	Node_2 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ k_4 = k_1_t + 1 }"]
+	Node_4 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ _5 = k_1_f }"]
+	Node_6 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ if (k_1 \>= argc_3) }"]
+	Node_8 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ # k_1 = PHI \<k_2(2), k_4(3)\> }"]
+	Node_10 [fillcolor=lightblue, color=lightblue, shape=Mrecord, style=filled, label="{ if (k_1 \< argc_3) }"]
+	Node_9 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_1: \[0.0, Infinity\] }"]
+	Node_3 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_4: \[1.0, Infinity\] }"]
+	Node_7 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_1_f: \[0.0, Infinity\] }"]
+	Node_11 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_1_t: \[0.0, Infinity\] }"]
+	Node_5 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ _5: \[-Infinity, Infinity\] }"]
+	Node_1 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ k_2: \[0.0, 0.0\] }"]
+	Node_12 [fillcolor=moccasin, color=moccasin, shape=Mrecord, style=filled, label="{ argc_3: \[-Infinity, Infinity\] }"]
+}
