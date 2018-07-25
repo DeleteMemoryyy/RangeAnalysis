@@ -4,7 +4,7 @@ This project is a part of Compiling Technique, Peking University.
 
 ### Introduction
 
-This pacage provides a simple implementation  to MiniC program range analysis method. 
+This package provides a simple implementation  to MiniC program range analysis method. 
 
 All of the apporach is following this paper: [A Fast and Low-Overhead Technique to Secure Programs Against Integer Overflows](https://ieeexplore.ieee.org/stamp/stamp.jsp?tp=&arnumber=6494996)
 
